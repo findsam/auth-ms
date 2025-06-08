@@ -14,6 +14,6 @@ func NewUserService(repo repo.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) GetUser(id string) (*model.User, error) {
-	return s.repo.GetByID(id)
+func (s *UserService) CreateUser() (*model.User, error) {
+	return s.repo.Create()
 }

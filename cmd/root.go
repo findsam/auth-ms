@@ -13,12 +13,12 @@ import (
 
 
 func Execute(){
-	client, err := mongo.New();
+	db, err := mongo.New();
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	userRepo := repo.NewUserRepositoryImpl(client) 
+	userRepo := repo.NewUserRepositoryImpl(db) 
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 

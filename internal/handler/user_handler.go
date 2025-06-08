@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/service"
-	"github.com/go-chi/chi/v5"
 )
 
 type UserHandler struct {
@@ -18,12 +17,12 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	user, err := h.service.GetUser(id)
+func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	user, err := h.service.CreateUser()
 	if err != nil {
-		http.Error(w, "Not found", http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(user)
 }
