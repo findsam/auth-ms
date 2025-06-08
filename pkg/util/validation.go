@@ -24,8 +24,7 @@ func init() {
 	})
 }
 
-
-func RenderErrors(e validator.ValidationErrors) map[string]string{
+func RenderErrors(e validator.ValidationErrors) map[string]string {
 	errors := make(map[string]string)
 	for _, err := range e {
 		field := err.Field()
@@ -36,7 +35,7 @@ func RenderErrors(e validator.ValidationErrors) map[string]string{
 			errors[field] = " invalid email address"
 		case "min":
 			errors[field] = field + " must be at least " + err.Param() + " characters"
-		case "containsany": 
+		case "containsany":
 			errors[field] = field + " must contain at least on special character " + err.Param()
 		default:
 			errors[field] = field + " is invalid"

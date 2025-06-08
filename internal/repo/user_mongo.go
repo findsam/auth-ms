@@ -32,7 +32,7 @@ func (u *UserRepositoryImpl) Create(user *model.User) (*model.User, error) {
 	insert, err := col.InsertOne(ctx, user)
 	if err != nil {
 		return nil, err
-	}	
+	}
 	oid, ok := insert.InsertedID.(bson.ObjectID)
 	if !ok {
 		return nil, fmt.Errorf("error while creating User %v", err)

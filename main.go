@@ -4,6 +4,6 @@ import (
 	"github.com/findsam/auth-micro/cmd"
 )
 
-func main(){
+func main() {
 	cmd.Execute()
 }

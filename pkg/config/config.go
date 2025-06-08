@@ -9,10 +9,10 @@ import (
 
 var Envs = config()
 
-func config() *t.Config{
+func config() *t.Config {
 	return &t.Config{
 		DB_USER: getEnv("DB_USER", ""),
-		DB_PWD: getEnv("DB_PWD", ""),
+		DB_PWD:  getEnv("DB_PWD", ""),
 		DB_NAME: getEnv("DB_NAME", ""),
 	}
 }

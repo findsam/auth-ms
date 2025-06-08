@@ -9,16 +9,15 @@ import (
 	"github.com/findsam/auth-micro/internal/service"
 	"github.com/findsam/auth-micro/pkg/mongo"
 	util "github.com/findsam/auth-micro/pkg/util"
-)	
+)
 
-
-func Execute(){
-	db, err := mongo.New();
+func Execute() {
+	db, err := mongo.New()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	userRepo := repo.NewUserRepositoryImpl(db) 
+	userRepo := repo.NewUserRepositoryImpl(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 

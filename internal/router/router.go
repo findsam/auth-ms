@@ -10,22 +10,20 @@ import (
 	"github.com/go-chi/cors"
 )
 
-
-
-type Router struct { 
-	addr string
-	handlers   *util.Handlers
+type Router struct {
+	addr     string
+	handlers *util.Handlers
 }
 
 func New(addr string, h *util.Handlers) *Router {
 	return &Router{
-		addr: fmt.Sprintf(":%s", addr),
+		addr:     fmt.Sprintf(":%s", addr),
 		handlers: h,
 	}
 }
 
 func (s *Router) Start() error {
-	c := chi.NewRouter();
+	c := chi.NewRouter()
 	c.Use(middleware.Logger)
 	c.Use(middleware.URLFormat)
 	c.Use(cors.Handler(cors.Options{
@@ -34,10 +32,10 @@ func (s *Router) Start() error {
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
-	
+
 	c.Route("/api/v1", func(r chi.Router) {
 		r.Route("/users", func(r chi.Router) {
-			r.Post("/sign-up", s.handlers.User.CreateUser);
+			r.Post("/sign-up", s.handlers.User.CreateUser)
 			r.Route("/user/{id}", func(r chi.Router) {
 			})
 		})

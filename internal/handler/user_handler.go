@@ -8,7 +8,7 @@ import (
 )
 
 type UserHandler struct {
-    service *service.UserService
+	service *service.UserService
 }
 
 func NewUserHandler(userService *service.UserService) *UserHandler {

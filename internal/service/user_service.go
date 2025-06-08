@@ -5,7 +5,6 @@ import (
 	"github.com/findsam/auth-micro/internal/repo"
 )
 
-
 type UserService struct {
 	repo repo.UserRepository
 }
