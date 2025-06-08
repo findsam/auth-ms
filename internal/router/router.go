@@ -4,18 +4,22 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/findsam/auth-micro/pkg/util"
+	"github.com/findsam/auth-micro/internal/handler"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 )
 
-type Router struct {
-	addr     string
-	handlers *util.Handlers
+type Handlers struct { 
+	User *handler.UserHandler
 }
 
-func New(addr string, h *util.Handlers) *Router {
+type Router struct {
+	addr     string
+	handlers *Handlers
+}
+
+func New(addr string, h *Handlers) *Router {
 	return &Router{
 		addr:     fmt.Sprintf(":%s", addr),
 		handlers: h,

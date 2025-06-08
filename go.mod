@@ -5,13 +5,14 @@ go 1.24.3
 require (
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-chi/cors v1.2.1
+	github.com/go-chi/render v1.0.3
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/joho/godotenv v1.5.1
-	go.mongodb.org/mongo-driver v1.17.4
 	go.mongodb.org/mongo-driver/v2 v2.2.2
 )
 
 require (
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect

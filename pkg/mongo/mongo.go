@@ -29,6 +29,5 @@ func New() (*mongo.Database, error) {
 	}
 
 	db := client.Database(DBNAME)
-
 	return db, nil
 }

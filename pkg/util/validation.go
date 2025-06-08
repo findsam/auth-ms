@@ -1,44 +1,53 @@
 package util
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
 
-var Validator *validator.Validate
-
-type Validatable interface {
-	Validate() error
+type Validator struct {
+	*validator.Validate
 }
 
-func init() {
-	Validator = validator.New(validator.WithRequiredStructEnabled())
-	Validator.RegisterTagNameFunc(func(fld reflect.StructField) string {
+func NewValidator() *Validator {
+	v := validator.New(validator.WithRequiredStructEnabled())
+	v.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
 		if name == "-" {
 			return ""
 		}
 		return name
 	})
+	return &Validator{v}
 }
 
-func RenderErrors(e validator.ValidationErrors) map[string]string {
+func (v *Validator) ParseValidationErrors(err error) map[string]string {
+	if err == nil {
+		return nil
+	}
+
+	validationErrors, ok := err.(validator.ValidationErrors)
+	if !ok {
+		return map[string]string{"_general": "validation error occurred"}
+	}
+
 	errors := make(map[string]string)
-	for _, err := range e {
-		field := err.Field()
-		switch err.Tag() {
+	for _, e := range validationErrors {
+		field := e.Field()
+		switch e.Tag() {
 		case "required":
 			errors[field] = field + " is required"
 		case "email":
-			errors[field] = " invalid email address"
+			errors[field] = field + " must be a valid email address"
 		case "min":
-			errors[field] = field + " must be at least " + err.Param() + " characters"
+			errors[field] = fmt.Sprintf("%s must be at least %s characters long", field, e.Param())
 		case "containsany":
-			errors[field] = field + " must contain at least on special character " + err.Param()
+			errors[field] = fmt.Sprintf("%s must contain at least one of: %s", field, e.Param())
 		default:
-			errors[field] = field + " is invalid"
+			errors[field] = fmt.Sprintf("%s is invalid", field)
 		}
 	}
 	return errors

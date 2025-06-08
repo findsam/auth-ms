@@ -1,7 +1,5 @@
 package util
 
-import "github.com/findsam/auth-micro/internal/handler"
-
 type Config struct {
 	DB_NAME string
 	DB_USER string
@@ -17,8 +15,4 @@ type SignUpRequest struct {
 type SignInRequest struct {
 	Username string `json:"username" validate:"required,min=3,max=20,alphanum"`
 	Password string `json:"password" validate:"required,min=6,containsany=!@#$%^&*"`
-}
-
-type Handlers struct {
-	User *handler.UserHandler
 }
