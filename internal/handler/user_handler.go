@@ -11,13 +11,13 @@ import (
 )
 
 type UserHandler struct {
-	service *service.UserService
+	service   *service.UserService
 	validator *util.Validator
 }
 
 func NewUserHandler(userService *service.UserService, validator *util.Validator) *UserHandler {
 	return &UserHandler{
-		service: userService,
+		service:   userService,
 		validator: validator,
 	}
 }
@@ -29,7 +29,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.validator.Struct(user); err != nil {	
+	if err := h.validator.Struct(user); err != nil {
 		render.Status(r, http.StatusBadRequest)
 		render.JSON(w, r, map[string]any{
 			"messages": h.validator.ParseValidationErrors(err),
@@ -42,7 +42,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(user)
 }

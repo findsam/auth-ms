@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-type Handlers struct { 
+type Handlers struct {
 	User *handler.UserHandler
 }
 
