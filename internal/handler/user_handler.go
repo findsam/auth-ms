@@ -39,10 +39,17 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.service.CreateUser(user)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		render.Status(r, http.StatusInternalServerError)
+		render.JSON(w, r, map[string]any{
+			"message": "Failed to create user",
+		})
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
+	render.Status(r, http.StatusCreated)
+	render.JSON(w, r, map[string]any{
+		"result": user,
+		"messages": "User created successfully",
+	})
+
 }
