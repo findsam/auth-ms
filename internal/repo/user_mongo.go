@@ -11,7 +11,8 @@ import (
 )
 
 type UserRepository interface {
-	Create(user *model.User) (*model.User, error)
+	CreateUser(user *model.User) (*model.User, error)
+	GetByEmail(email string) (*model.User, error)
 }
 
 type UserRepositoryImpl struct {
@@ -24,7 +25,7 @@ func NewUserRepositoryImpl(db *mongo.Database) *UserRepositoryImpl {
 	}
 }
 
-func (u *UserRepositoryImpl) Create(user *model.User) (*model.User, error) {
+func (u *UserRepositoryImpl) CreateUser(user *model.User) (*model.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	col := u.db.Collection("users")
@@ -38,5 +39,21 @@ func (u *UserRepositoryImpl) Create(user *model.User) (*model.User, error) {
 		return nil, fmt.Errorf("error while creating User %v", err)
 	}
 	user.ID = oid.Hex()
+	return user, nil
+}
+
+func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	col := u.db.Collection("users")
+
+	user := new(model.User)
+	err := col.FindOne(ctx, bson.M{"email": email}).Decode(&user)
+	if err == mongo.ErrNoDocuments {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
 	return user, nil
 }

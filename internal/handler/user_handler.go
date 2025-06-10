@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/model"
@@ -23,13 +22,14 @@ func NewUserHandler(userService *service.UserService, validator *util.Validator)
 }
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	user := new(model.User)
-	if err := json.NewDecoder(r.Body).Decode(user); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+	user, err := ParseRequestBody[model.User](r)
+	if err != nil {
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, "error")
 		return
 	}
-
-	if err := h.validator.Struct(user); err != nil {
+	err = ValidateBody(user, h.validator)
+	if err != nil { 
 		render.Status(r, http.StatusBadRequest)
 		render.JSON(w, r, map[string]any{
 			"messages": h.validator.ParseValidationErrors(err),
@@ -37,7 +37,25 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.CreateUser(user)
+	if err != nil { 
+		render.Status(r, http.StatusBadRequest)
+		render.JSON(w, r, map[string]any{
+			"messages": h.validator.ParseValidationErrors(err),
+		})
+		return
+	}
+
+
+
+	// if err := h.validator.Struct(user); err != nil {
+	// 	render.Status(r, http.StatusBadRequest)
+	// 	render.JSON(w, r, map[string]any{
+	// 		"messages": h.validator.ParseValidationErrors(err),
+	// 	})
+	// 	return
+	// }
+
+	createdUser, err := h.service.CreateUser(user)
 	if err != nil {
 		render.Status(r, http.StatusInternalServerError)
 		render.JSON(w, r, map[string]any{
@@ -48,8 +66,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusCreated)
 	render.JSON(w, r, map[string]any{
-		"result": user,
+		"result":   createdUser,
 		"messages": "User created successfully",
 	})
-
 }
