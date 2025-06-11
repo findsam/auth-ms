@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/findsam/auth-micro/pkg/config"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -18,7 +19,7 @@ func New() (*mongo.Database, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.Connect(options.Client().ApplyURI(config.Envs.MONGO_URI))
 	if err != nil {
 		return nil, err
 	}

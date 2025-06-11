@@ -5,6 +5,7 @@ type Config struct {
 	DB_USER    string
 	DB_PWD     string
 	JWT_SECRET string
+	MONGO_URI  string
 }
 
 type SignUpRequest struct {
