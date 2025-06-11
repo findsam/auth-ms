@@ -32,8 +32,17 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	http.SetCookie(w, &http.Cookie{
+		Name:  "refresh_token",
+		Value: tokens.RefreshToken,
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+		Secure:  true,
+		Path: "/",
+	})
+
 	h.SendSuccess(w, r, http.StatusCreated, "User Created Successfully", map[string]any{
-		"user":  user,
-		"tokens": tokens,
+		"user":        user,
+		"token": tokens.AccessToken,
 	})
 }

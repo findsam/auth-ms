@@ -18,7 +18,7 @@ func Execute() {
 	}
 
 	validator := util.NewValidator()
-	baseHandler := handler.NewBaseHanlder(validator)
+	baseHandler := handler.NewBaseHandler(validator)
 
 	userRepo := repo.NewUserRepositoryImpl(db)
 	userService := service.NewUserService(userRepo)

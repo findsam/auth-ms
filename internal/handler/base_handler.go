@@ -13,7 +13,7 @@ type BaseHandler struct {
 	Validator *util.Validator
 }
 
-func NewBaseHanlder(validator *util.Validator) *BaseHandler {
+func NewBaseHandler(validator *util.Validator) *BaseHandler {
 	return &BaseHandler{
 		Validator: validator,
 	}
@@ -34,10 +34,6 @@ func (h *BaseHandler) SendSuccess(w http.ResponseWriter, r *http.Request, status
 	})
 }
 
-func (h *BaseHandler) RenderValidationError(w http.ResponseWriter, r *http.Request, status int, messages []string) {
-	// http.Error(w, message, status)
-}
-
 func ParseRequestBody[T any](r *http.Request, v *util.Validator) (*T, error) {
 	var data T
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
@@ -48,4 +44,17 @@ func ParseRequestBody[T any](r *http.Request, v *util.Validator) (*T, error) {
 		return nil, err
 	}
 	return &data, nil
+}
+
+
+func StructToMap(v any) (map[string]any, error) {
+	bytes, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	var m map[string]any
+	if err := json.Unmarshal(bytes, &m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }

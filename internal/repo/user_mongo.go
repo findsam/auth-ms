@@ -52,7 +52,7 @@ func (u *UserRepositoryImpl) CreateUser(user *model.User) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	
 	return inserted, nil
 }
 

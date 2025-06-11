@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/repo"
+	"github.com/findsam/auth-micro/pkg/bcrypt"
 	"github.com/findsam/auth-micro/pkg/token"
 	"github.com/findsam/auth-micro/pkg/util"
 )
@@ -16,7 +17,13 @@ func NewUserService(repo repo.UserRepository) *UserService {
 }
 
 
-func (s *UserService) CreateUser(u *model.User,) (*model.User, *util.TokenPair, error) {
+func (s *UserService) CreateUser(u *model.User) (*model.User, *util.TokenPair, error) {	
+	
+	pwd, err := bcrypt.HashPassword(u.Password) 	
+	if err != nil {
+		return nil, nil, err
+	}
+	u.Password = pwd
 	user, err := s.repo.CreateUser(u)
 	if err != nil {
 		return nil, nil, err
