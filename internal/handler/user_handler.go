@@ -59,7 +59,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		h.SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
-	
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refresh_token",
 		Value:    tokens.RefreshToken,
