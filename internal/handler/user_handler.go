@@ -53,11 +53,22 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		h.SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
+
 	user, tokens, err := h.service.SignIn(req)
 	if err != nil {
 		h.SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
+	
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+		Secure:   true,
+		Path:     "/",
+	})
+
 	h.SendSuccess(w, r, http.StatusOK, "User Signed In Successfully", map[string]any{
 		"user":  user,
 		"token": tokens.AccessToken,

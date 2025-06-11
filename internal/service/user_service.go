@@ -18,8 +18,9 @@ func NewUserService(repo repo.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error) {
-	pwd, err := bcrypt.HashPassword(u.Password)
+
+func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error) {	
+	pwd, err := bcrypt.HashPassword(u.Password) 	
 	if err != nil {
 		return nil, nil, err
 	}
@@ -32,10 +33,11 @@ func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error
 	if err != nil {
 		return nil, nil, err
 	}
-	return user, tokens, nil
+	return user, tokens, nil	
 }
 
-func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.User, *util.TokenPair, error) {
+func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.User, *util.TokenPair, error) {	
+
 	user, err := s.repo.GetByEmail(u.Email)
 	if err != nil {
 		return nil, nil, err

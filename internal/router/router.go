@@ -31,7 +31,7 @@ func (s *Router) Start() error {
 	c.Use(middleware.Logger)
 	c.Use(middleware.URLFormat)
 	c.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
+		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
