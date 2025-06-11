@@ -1,4 +1,4 @@
-package util
+package token
 
 import (
 	"crypto/rand"
@@ -10,10 +10,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func generateAccessToken() (string, error) {
+func generateAccessToken(sub string) (string, error) {
 	claims := jwt.MapClaims{
-		"sub":  "1234567890",
-		"name": "John Doe",
+		"sub":  sub,
 		"exp":  time.Now().Add(15 * time.Minute).Unix(),
 		"iat":  time.Now().Unix(),
 	}
@@ -35,10 +34,10 @@ func generateOpaqueToken() (string, error) {
 	return str, nil
 }
 
-func GenerateTokens() (*util.TokenPair, error) {
+func GenerateTokens(id string) (*util.TokenPair, error) {
 	pair := new(util.TokenPair)
 
-	accessToken, err := generateAccessToken()
+	accessToken, err := generateAccessToken(id)
 	if err != nil {
 		return nil, err
 	}

@@ -10,6 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
+const (
+	COLLECTION_NAME = "users"
+)
+
 type UserRepository interface {
 	CreateUser(user *model.User) (*model.User, error)
 	GetByEmail(email string) (*model.User, error)
@@ -30,28 +34,35 @@ func (u *UserRepositoryImpl) CreateUser(user *model.User) (*model.User, error) {
 	defer cancel()
 	col := u.db.Collection("users")
 
-	insert, err := col.InsertOne(ctx, user)
+	exists, err := u.GetByEmail(user.Email)
+	if err != nil && err != mongo.ErrNoDocuments {
+		return nil, err
+	}
+	if exists != nil {
+		return nil, fmt.Errorf("user with email %s already exists", user.Email)
+	}
+
+	_, err = col.InsertOne(ctx, user)
 	if err != nil {
 		return nil, err
 	}
-	oid, ok := insert.InsertedID.(bson.ObjectID)
-	if !ok {
-		return nil, fmt.Errorf("error while creating User %v", err)
+
+	inserted, err := u.GetByEmail(user.Email)
+
+	if err != nil {
+		return nil, err
 	}
-	user.ID = oid.Hex()
-	return user, nil
+
+	return inserted, nil
 }
 
 func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
+	col := u.db.Collection(COLLECTION_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	col := u.db.Collection("users")
 
 	user := new(model.User)
-	err := col.FindOne(ctx, bson.M{"email": email}).Decode(&user)
-	if err == mongo.ErrNoDocuments {
-		return nil, nil
-	}
+	err := col.FindOne(ctx, bson.M{"email": email}).Decode(user)
 	if err != nil {
 		return nil, err
 	}

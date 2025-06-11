@@ -18,10 +18,11 @@ func Execute() {
 	}
 
 	validator := util.NewValidator()
+	baseHandler := handler.NewBaseHanlder(validator)
 
 	userRepo := repo.NewUserRepositoryImpl(db)
 	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(userService, validator)
+	userHandler := handler.NewUserHandler(baseHandler, userService)
 
 	if err := router.New("8080", &router.Handlers{
 		User: userHandler,
