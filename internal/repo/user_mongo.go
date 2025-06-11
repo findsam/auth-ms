@@ -52,24 +52,24 @@ func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return inserted, nil
 }
 
 func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
-    col := u.db.Collection(COLLECTION_NAME)
-    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-    defer cancel()
+	col := u.db.Collection(COLLECTION_NAME)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-    user := new(model.User)
-    err := col.FindOne(
-        ctx,
-        bson.M{"email": email},
-    ).Decode(user)
+	user := new(model.User)
+	err := col.FindOne(
+		ctx,
+		bson.M{"email": email},
+	).Decode(user)
 
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    return user, nil
+	return user, nil
 }

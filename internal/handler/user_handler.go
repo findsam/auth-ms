@@ -33,16 +33,16 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:  "refresh_token",
-		Value: tokens.RefreshToken,
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
 		SameSite: http.SameSiteStrictMode,
 		HttpOnly: true,
-		Secure:  true,
-		Path: "/",
+		Secure:   true,
+		Path:     "/",
 	})
 
 	h.SendSuccess(w, r, http.StatusCreated, "User Created Successfully", map[string]any{
-		"user":        user,
+		"user":  user,
 		"token": tokens.AccessToken,
 	})
 }
@@ -59,7 +59,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	h.SendSuccess(w, r, http.StatusOK, "User Signed In Successfully", map[string]any{
-		"user":        user,
-		"token":       tokens.AccessToken,
+		"user":  user,
+		"token": tokens.AccessToken,
 	})
 }

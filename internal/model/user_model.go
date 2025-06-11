@@ -10,8 +10,7 @@ type User struct {
 	Password string        `bson:"password" json:"password" validate:"required,min=6,containsany=!@#$%^&*"`
 }
 
-
-type UserSignInRequest struct { 
-	Email    string  `bson:"email" json:"email" validate:"required,email"`
-	Password string  `bson:"password" json:"password" validate:"required"`
+type UserSignInRequest struct {
+	Email    string `bson:"email" json:"email" validate:"required,email"`
+	Password string `bson:"password" json:"password" validate:"required"`
 }

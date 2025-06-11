@@ -45,4 +45,3 @@ func ParseRequestBody[T any](r *http.Request, v *util.Validator) (*T, error) {
 	}
 	return &data, nil
 }
-
