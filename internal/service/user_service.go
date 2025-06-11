@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/repo"
 	"github.com/findsam/auth-micro/pkg/bcrypt"
@@ -17,14 +19,13 @@ func NewUserService(repo repo.UserRepository) *UserService {
 }
 
 
-func (s *UserService) CreateUser(u *model.User) (*model.User, *util.TokenPair, error) {	
-	
+func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error) {	
 	pwd, err := bcrypt.HashPassword(u.Password) 	
 	if err != nil {
 		return nil, nil, err
 	}
 	u.Password = pwd
-	user, err := s.repo.CreateUser(u)
+	user, err := s.repo.SignUp(u)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -32,8 +33,24 @@ func (s *UserService) CreateUser(u *model.User) (*model.User, *util.TokenPair, e
 	if err != nil {
 		return nil, nil, err
 	}
+	return user, tokens, nil	
+}
+
+func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.User, *util.TokenPair, error) {	
+	user, err := s.repo.GetByEmail(u.Email)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if !bcrypt.ComparePasswords(user.Password, u.Password) {
+		return nil, nil, fmt.Errorf("invalid credentials")
+	}
+
+	tokens, err := token.GenerateTokens(user.ID.Hex())
+	if err != nil {
+		return nil, nil, err
+	}
 	return user, tokens, nil
-	
 }
 
 func (s *UserService) GetByEmail(e string) (*model.User, error) {

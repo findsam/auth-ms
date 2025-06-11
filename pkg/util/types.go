@@ -14,12 +14,13 @@ type SignUpRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 }
 
-type SignInRequest struct {
-	Username string `json:"username" validate:"required,min=3,max=20,alphanum"`
-	Password string `json:"password" validate:"required,min=6,containsany=!@#$%^&*"`
-}
-
 type TokenPair struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
+}
+
+
+type SignInRequest struct { 
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=6,max=100"`
 }

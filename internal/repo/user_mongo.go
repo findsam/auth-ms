@@ -15,7 +15,7 @@ const (
 )
 
 type UserRepository interface {
-	CreateUser(user *model.User) (*model.User, error)
+	SignUp(user *model.User) (*model.User, error)
 	GetByEmail(email string) (*model.User, error)
 }
 
@@ -29,7 +29,7 @@ func NewUserRepositoryImpl(db *mongo.Database) *UserRepositoryImpl {
 	}
 }
 
-func (u *UserRepositoryImpl) CreateUser(user *model.User) (*model.User, error) {
+func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	col := u.db.Collection("users")
@@ -57,14 +57,19 @@ func (u *UserRepositoryImpl) CreateUser(user *model.User) (*model.User, error) {
 }
 
 func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
-	col := u.db.Collection(COLLECTION_NAME)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+    col := u.db.Collection(COLLECTION_NAME)
+    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
 
-	user := new(model.User)
-	err := col.FindOne(ctx, bson.M{"email": email}).Decode(user)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
+    user := new(model.User)
+    err := col.FindOne(
+        ctx,
+        bson.M{"email": email},
+    ).Decode(user)
+
+    if err != nil {
+        return nil, err
+    }
+
+    return user, nil
 }

@@ -46,15 +46,3 @@ func ParseRequestBody[T any](r *http.Request, v *util.Validator) (*T, error) {
 	return &data, nil
 }
 
-
-func StructToMap(v any) (map[string]any, error) {
-	bytes, err := json.Marshal(v)
-	if err != nil {
-		return nil, err
-	}
-	var m map[string]any
-	if err := json.Unmarshal(bytes, &m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}

@@ -39,7 +39,8 @@ func (s *Router) Start() error {
 
 	c.Route("/api/v1", func(r chi.Router) {
 		r.Route("/users", func(r chi.Router) {
-			r.Post("/sign-up", s.handlers.User.CreateUser)
+			r.Post("/sign-up", s.handlers.User.SignUp)
+			r.Post("/sign-in", s.handlers.User.SignIn)
 			r.Route("/user/{id}", func(r chi.Router) {
 			})
 		})
