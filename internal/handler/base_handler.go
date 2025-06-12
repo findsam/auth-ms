@@ -26,12 +26,9 @@ func (h *BaseHandler) SendError(w http.ResponseWriter, r *http.Request, status i
 	})
 }
 
-func (h *BaseHandler) SendSuccess(w http.ResponseWriter, r *http.Request, status int, message string, results interface{}) {
+func (h *BaseHandler) SendSuccess(w http.ResponseWriter, r *http.Request, status int, results interface{}) {
 	render.Status(r, status)
-	render.JSON(w, r, map[string]any{
-		"message": message,
-		"results": results,
-	})
+	render.JSON(w,r, results)
 }
 
 func ParseRequestBody[T any](r *http.Request, v *util.Validator) (*T, error) {

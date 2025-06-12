@@ -41,8 +41,9 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 	})
 
-	h.SendSuccess(w, r, http.StatusCreated, "User Created Successfully", map[string]any{
+	h.SendSuccess(w, r, http.StatusCreated, map[string]any{
 		"user":  user,
+		"message": "Signup successful",
 		"token": tokens.AccessToken,
 	})
 }
@@ -67,10 +68,15 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
+		MaxAge:   7 * 24 * 60 * 60, 
 	})
 
-	h.SendSuccess(w, r, http.StatusOK, "User Signed In Successfully", map[string]any{
-		"user":  user,
-		"token": tokens.AccessToken,
+	h.SendSuccess(w, r, http.StatusOK, map[string]any{
+		"message": "Successfully signed in",
+		"results": map[string]interface{}{
+			"token": tokens.AccessToken,
+			"id":    user.ID,
+			"email": user.Email,
+		},
 	})
 }
