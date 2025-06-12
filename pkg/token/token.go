@@ -14,7 +14,7 @@ import (
 func generateAccessToken(sub string) (string, error) {
 	claims := jwt.MapClaims{
 		"sub": sub,
-		"exp": time.Now().Add(15 * time.Minute).Unix(),
+		"exp": time.Now().Add(5 * time.Minute).Unix(),
 		"iat": time.Now().Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -42,11 +42,11 @@ func GenerateTokens(id string) (*util.TokenPair, error) {
 	if err != nil {
 		return nil, err
 	}
-	pair.AccessToken = accessToken
 	refreshToken, err := generateOpaqueToken()
 	if err != nil {
 		return nil, err
 	}
+	pair.AccessToken = accessToken
 	pair.RefreshToken = refreshToken
 	return pair, nil
 }

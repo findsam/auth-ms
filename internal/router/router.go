@@ -44,6 +44,7 @@ func (s *Router) Start() error {
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Get("/me", s.handlers.User.Me)
+				r.Get("/refresh", s.handlers.User.Refresh)
 			})
 		})
 	})

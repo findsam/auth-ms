@@ -37,6 +37,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
+		MaxAge:   7 * 24 * 60 * 60, 
 	})
 
 	SendSuccess(w, r, http.StatusOK, map[string]any{
@@ -77,9 +78,30 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
-	// userID := r.Context().Value("userID").(string)
-	// h.SendSuccess(w, r, http.StatusOK, map[string]any{
-	// 	"user": user,
-	// })
-	SendSuccess(w,r, http.StatusOK, nil)
+	SendSuccess(w,r, http.StatusOK, "Logged in")
+}
+
+func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
+	uid := r.Context().Value("uid").(string)
+
+	tokens, err := h.service.Refresh(uid)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    tokens.RefreshToken,
+		SameSite: http.SameSiteStrictMode,
+		HttpOnly: true,
+		Secure:   true,
+		Path:     "/",
+		MaxAge:   7 * 24 * 60 * 60, 
+	})
+
+	SendSuccess(w,r, http.StatusOK, map[string]any{
+		"message": "Successfully refreshed",
+		"token": tokens.AccessToken,
+	})
 }

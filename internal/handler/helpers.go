@@ -14,7 +14,7 @@ var validator = util.NewValidator()
 func SendError(w http.ResponseWriter, r *http.Request, status int, err error) {
 	render.Status(r, status)
 	render.JSON(w, r, map[string]any{
-		"error": err.Error(),
+		"message": err.Error(),
 	})
 }
 
