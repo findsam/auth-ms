@@ -8,27 +8,25 @@ import (
 )
 
 type UserHandler struct {
-	*BaseHandler
 	service *service.UserService
 }
 
-func NewUserHandler(baseHandler *BaseHandler, userService *service.UserService) *UserHandler {
+func NewUserHandler(userService *service.UserService) *UserHandler {
 	return &UserHandler{
-		BaseHandler: baseHandler,
 		service:     userService,
 	}
 }
 
 func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
-	user, err := ParseRequestBody[model.User](r, h.BaseHandler.Validator)
+	user, err := ParseBody[model.User](r)
 	if err != nil {
-		h.SendError(w, r, http.StatusInternalServerError, err)
+		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
 	user, tokens, err := h.service.SignUp(user)
 	if err != nil {
-		h.SendError(w, r, http.StatusInternalServerError, err)
+		SendSuccess(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -41,23 +39,23 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 	})
 
-	h.SendSuccess(w, r, http.StatusCreated, map[string]any{
-		"user":  user,
-		"message": "Signup successful",
+	SendSuccess(w, r, http.StatusOK, map[string]any{
+		"message": "Successfully signed in",
+		"user": user,
 		"token": tokens.AccessToken,
 	})
 }
 
 func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
-	req, err := ParseRequestBody[model.UserSignInRequest](r, h.BaseHandler.Validator)
+	req, err := ParseBody[model.UserSignInRequest](r)
 	if err != nil {
-		h.SendError(w, r, http.StatusInternalServerError, err)
+		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
 	user, tokens, err := h.service.SignIn(req)
 	if err != nil {
-		h.SendError(w, r, http.StatusInternalServerError, err)
+		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -71,12 +69,17 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   7 * 24 * 60 * 60, 
 	})
 
-	h.SendSuccess(w, r, http.StatusOK, map[string]any{
+	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "Successfully signed in",
-		"results": map[string]interface{}{
-			"token": tokens.AccessToken,
-			"id":    user.ID,
-			"email": user.Email,
-		},
+		"user": user,
+		"token": tokens.AccessToken,
 	})
+}
+
+func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
+	// userID := r.Context().Value("userID").(string)
+	// h.SendSuccess(w, r, http.StatusOK, map[string]any{
+	// 	"user": user,
+	// })
+	SendSuccess(w,r, http.StatusOK, nil)
 }

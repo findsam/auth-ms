@@ -8,7 +8,6 @@ import (
 	"github.com/findsam/auth-micro/internal/router"
 	"github.com/findsam/auth-micro/internal/service"
 	"github.com/findsam/auth-micro/pkg/mongo"
-	"github.com/findsam/auth-micro/pkg/util"
 )
 
 func Execute() {
@@ -17,12 +16,9 @@ func Execute() {
 		log.Fatal(err)
 	}
 
-	validator := util.NewValidator()
-	baseHandler := handler.NewBaseHandler(validator)
-
 	userRepo := repo.NewUserRepositoryImpl(db)
 	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(baseHandler, userService)
+	userHandler := handler.NewUserHandler(userService)
 
 	if err := router.New("8080", &router.Handlers{
 		User: userHandler,

@@ -3,6 +3,7 @@ package token
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"time"
 
 	"github.com/findsam/auth-micro/pkg/config"
@@ -49,3 +50,19 @@ func GenerateTokens(id string) (*util.TokenPair, error) {
 	pair.RefreshToken = refreshToken
 	return pair, nil
 }
+
+func ReadJWT(t *jwt.Token) string {
+	claims := t.Claims.(jwt.MapClaims)
+	uid := claims["sub"].(string)
+	return uid
+}
+
+func ValidateJWT(tokenString string) (*jwt.Token, error) {
+	return jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(config.Envs.JWT_SECRET), nil
+	})
+}
+
