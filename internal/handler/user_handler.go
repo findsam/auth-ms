@@ -13,7 +13,7 @@ type UserHandler struct {
 
 func NewUserHandler(userService *service.UserService) *UserHandler {
 	return &UserHandler{
-		service:     userService,
+		service: userService,
 	}
 }
 
@@ -37,13 +37,13 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
-		MaxAge:   7 * 24 * 60 * 60, 
+		MaxAge:   7 * 24 * 60 * 60,
 	})
 
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "Successfully signed in",
-		"user": user,
-		"token": tokens.AccessToken,
+		"user":    user,
+		"token":   tokens.AccessToken,
 	})
 }
 
@@ -67,18 +67,28 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
-		MaxAge:   7 * 24 * 60 * 60, 
+		MaxAge:   7 * 24 * 60 * 60,
 	})
 
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "Successfully signed in",
-		"user": user,
-		"token": tokens.AccessToken,
+		"user":    user,
+		"token":   tokens.AccessToken,
 	})
 }
 
 func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
-	SendSuccess(w,r, http.StatusOK, "Logged in")
+	uid := r.Context().Value("uid").(string)
+	user, err := h.service.GetById(uid)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+
+	SendSuccess(w, r, http.StatusOK, map[string]any{
+		"message": "User data retrieved successfully",
+		"user":    user,
+	})
 }
 
 func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
@@ -97,11 +107,11 @@ func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
-		MaxAge:   7 * 24 * 60 * 60, 
+		MaxAge:   7 * 24 * 60 * 60,
 	})
 
-	SendSuccess(w,r, http.StatusOK, map[string]any{
+	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "Successfully refreshed",
-		"token": tokens.AccessToken,
+		"token":   tokens.AccessToken,
 	})
 }

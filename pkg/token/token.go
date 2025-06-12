@@ -65,4 +65,3 @@ func ValidateJWT(tokenString string) (*jwt.Token, error) {
 		return []byte(config.Envs.JWT_SECRET), nil
 	})
 }
-

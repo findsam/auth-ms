@@ -11,7 +11,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-
 func getTokenFromRequest(r *http.Request) string {
 	tokenAuth := r.Header.Get("Authorization")
 	if len(tokenAuth) > 7 && tokenAuth[:7] == "Bearer " {
@@ -28,11 +27,11 @@ func WithJWT(next http.Handler) http.Handler {
 		t, err := token.ValidateJWT(str)
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
-				if(r.URL.Path == "/api/v1/users/refresh") {
+				if r.URL.Path == "/api/v1/users/refresh" {
 					ctx := context.WithValue(r.Context(), "uid", token.ReadJWT(t))
 					next.ServeHTTP(w, r.WithContext(ctx))
 					return
-				} 
+				}
 				handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("expired"))
 				return
 			}
