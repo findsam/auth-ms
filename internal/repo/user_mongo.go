@@ -20,7 +20,6 @@ type UserRepository interface {
 	GetByEmail(email string) (*model.User, error)
 	GetById(id string) (*model.User, error)
 	GetByUsername(username string) (*model.User, error)
-
 }
 
 type UserRepositoryImpl struct {
@@ -78,7 +77,6 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	return user, nil
 }
 
-
 func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	col := u.db.Collection(COLLECTION_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -101,7 +99,6 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 
 	return user, nil
 }
-
 
 func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error) {
 	col := u.db.Collection(COLLECTION_NAME)

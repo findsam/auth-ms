@@ -22,7 +22,6 @@ func getTokenFromRequest(r *http.Request) string {
 func WithJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		accessToken := getTokenFromRequest(r)
-		
 
 		t, err := token.ValidateJWT(accessToken)
 		if err != nil {
@@ -32,7 +31,7 @@ func WithJWT(next http.Handler) http.Handler {
 					if cookieErr != nil || refreshCookie.Value == "" {
 						handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("refresh token required"))
 						return
-					}			
+					}
 					ctx := context.WithValue(r.Context(), "uid", token.ReadJWT(t))
 					next.ServeHTTP(w, r.WithContext(ctx))
 					return
