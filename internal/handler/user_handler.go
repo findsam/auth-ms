@@ -78,19 +78,6 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
-	uid := r.Context().Value("uid").(string)
-	user, err := h.service.GetById(uid)
-	if err != nil {
-		SendError(w, r, http.StatusInternalServerError, err)
-		return
-	}
-	SendSuccess(w, r, http.StatusOK, map[string]any{
-		"message": "User data retrieved successfully",
-		"user":    user,
-	})
-}
-
 func (h *UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	uid := chi.URLParam(r, "id")
 	user, err := h.service.GetById(uid)
@@ -117,7 +104,18 @@ func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-
+func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
+	uid := r.Context().Value("uid").(string)
+	user, err := h.service.GetById(uid)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+	SendSuccess(w, r, http.StatusOK, map[string]any{
+		"message": "User data retrieved successfully",
+		"user":    user,
+	})
+}
 
 func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	uid := r.Context().Value("uid").(string)
