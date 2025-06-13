@@ -119,7 +119,6 @@ func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	uid := r.Context().Value("uid").(string)
-
 	tokens, err := h.service.Refresh(uid)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)

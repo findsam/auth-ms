@@ -14,7 +14,7 @@ import (
 func generateAccessToken(sub string) (string, error) {
 	claims := jwt.MapClaims{
 		"sub": sub,
-		"exp": time.Now().Add(5 * time.Minute).Unix(),
+		"exp": time.Now().Add(2 * time.Minute).Unix(),
 		"iat": time.Now().Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

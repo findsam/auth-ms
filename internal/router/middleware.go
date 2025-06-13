@@ -21,10 +21,15 @@ func getTokenFromRequest(r *http.Request) string {
 
 func WithJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		str := getTokenFromRequest(r)
-		fmt.Println(str)
+		accessToken := getTokenFromRequest(r)
+		
+		_, cookieErr := r.Cookie("refresh_token")
+		if cookieErr != nil {
+			handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("refresh token required"))
+			return
+		}
 
-		t, err := token.ValidateJWT(str)
+		t, err := token.ValidateJWT(accessToken)
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
 				if r.URL.Path == "/api/v1/users/refresh" {
