@@ -23,16 +23,16 @@ func WithJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		accessToken := getTokenFromRequest(r)
 		
-		refreshCookie, cookieErr := r.Cookie("refresh_token")
-		if cookieErr != nil || refreshCookie.Value == "" {
-			handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("refresh token required"))
-			return
-		}
 
 		t, err := token.ValidateJWT(accessToken)
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
 				if r.URL.Path == "/api/v1/users/refresh" {
+					refreshCookie, cookieErr := r.Cookie("refresh_token")
+					if cookieErr != nil || refreshCookie.Value == "" {
+						handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("refresh token required"))
+						return
+					}			
 					ctx := context.WithValue(r.Context(), "uid", token.ReadJWT(t))
 					next.ServeHTTP(w, r.WithContext(ctx))
 					return
