@@ -19,6 +19,8 @@ type UserRepository interface {
 	SignUp(user *model.User) (*model.User, error)
 	GetByEmail(email string) (*model.User, error)
 	GetById(id string) (*model.User, error)
+	GetByUsername(username string) (*model.User, error)
+
 }
 
 type UserRepositoryImpl struct {
@@ -76,6 +78,7 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	return user, nil
 }
 
+
 func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	col := u.db.Collection(COLLECTION_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -90,6 +93,25 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	err = col.FindOne(
 		ctx,
 		bson.M{"_id": bson.ObjectID(oid)},
+	).Decode(user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+
+func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error) {
+	col := u.db.Collection(COLLECTION_NAME)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	user := new(model.User)
+
+	err := col.FindOne(
+		ctx,
+		bson.M{"username": username},
 	).Decode(user)
 
 	if err != nil {

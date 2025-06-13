@@ -61,6 +61,10 @@ func (s *UserService) GetById(id string) (*model.User, error) {
 	return s.repo.GetById(id)
 }
 
+func (s *UserService) GetByUsername(id string) (*model.User, error) {
+	return s.repo.GetByUsername(id)
+}
+
 func (s *UserService) Me(t string) (*model.User, error) {
 	return nil, nil
 }

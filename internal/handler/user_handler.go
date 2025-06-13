@@ -5,6 +5,7 @@ import (
 
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/service"
+	"github.com/go-chi/chi/v5"
 )
 
 type UserHandler struct {
@@ -84,12 +85,39 @@ func (h *UserHandler) Me(w http.ResponseWriter, r *http.Request) {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
-
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "User data retrieved successfully",
 		"user":    user,
 	})
 }
+
+func (h *UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
+	uid := chi.URLParam(r, "id")
+	user, err := h.service.GetById(uid)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+	SendSuccess(w, r, http.StatusOK, map[string]any{
+		"message": "User data retrieved successfully",
+		"user":    user,
+	})
+}
+
+func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
+	username := chi.URLParam(r, "username")
+	user, err := h.service.GetByUsername(username)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+	SendSuccess(w, r, http.StatusOK, map[string]any{
+		"message": "User data retrieved successfully",
+		"user":    user,
+	})
+}
+
+
 
 func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	uid := r.Context().Value("uid").(string)

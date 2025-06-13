@@ -41,6 +41,10 @@ func (s *Router) Start() error {
 		r.Route("/users", func(r chi.Router) {
 			r.Post("/sign-up", s.handlers.User.SignUp)
 			r.Post("/sign-in", s.handlers.User.SignIn)
+			r.Route("/user", func(r chi.Router) {
+				r.Get("/{id:[a-f0-9]{24}}", s.handlers.User.GetById)
+				r.Get("/{username:[^a-f0-9].*}", s.handlers.User.GetByUsername)
+			})
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Get("/me", s.handlers.User.Me)
