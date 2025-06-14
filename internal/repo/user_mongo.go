@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	COLLECTION_NAME = "users"
+	USER_DB_NAME = "users"
 )
 
 type UserRepository interface {
@@ -35,7 +35,7 @@ func NewUserRepositoryImpl(db *mongo.Database) *UserRepositoryImpl {
 func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	col := u.db.Collection("users")
+	col := u.db.Collection(USER_DB_NAME)
 
 	exists, err := u.GetByEmail(user.Email)
 	if err != nil && err != mongo.ErrNoDocuments {
@@ -60,7 +60,7 @@ func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 }
 
 func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
-	col := u.db.Collection(COLLECTION_NAME)
+	col := u.db.Collection(USER_DB_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -78,7 +78,7 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 }
 
 func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
-	col := u.db.Collection(COLLECTION_NAME)
+	col := u.db.Collection(USER_DB_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -101,7 +101,7 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 }
 
 func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error) {
-	col := u.db.Collection(COLLECTION_NAME)
+	col := u.db.Collection(USER_DB_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	user := new(model.User)
