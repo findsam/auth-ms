@@ -26,7 +26,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, tokens, err := h.service.SignUp(user)
+	resp, tokens, err := h.service.SignUp(user)
 	if err != nil {
 		SendSuccess(w, r, http.StatusInternalServerError, err)
 		return
@@ -44,7 +44,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "Successfully signed in",
-		"user":    user,
+		"user":    resp,
 		"token":   tokens.AccessToken,
 	})
 }
