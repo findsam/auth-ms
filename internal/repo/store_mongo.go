@@ -8,7 +8,7 @@ import (
 const STORE_DB_NAME = "store"
 
 type StoreRepository interface {
-	Create(user *model.User) (*model.User, error)
+	Create() (*model.User, error)
 }
 
 type StoreRepositoryImpl struct {

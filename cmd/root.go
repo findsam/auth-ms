@@ -20,7 +20,9 @@ func Execute() {
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 
-	storeHandler := handler.NewStoreHandler()
+	storeRepo := repo.NewStoreRepositoryImpl(db)
+	storeService := service.NewStoreService(storeRepo)
+	storeHandler := handler.NewStoreHandler(storeService)
 
 	if err := router.New("8080", &router.Handlers{
 		User: userHandler,
