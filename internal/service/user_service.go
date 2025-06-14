@@ -18,7 +18,7 @@ func NewUserService(repo repo.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error) {
+func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair, error) {
 	u.ToDatabase()
 	pwd, err := bcrypt.HashPassword(u.Password)
 	if err != nil {
