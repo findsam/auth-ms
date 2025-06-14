@@ -12,6 +12,7 @@ import (
 
 type Handlers struct {
 	User *handler.UserHandler
+	Store *handler.StoreHandler
 }
 
 type Router struct {
