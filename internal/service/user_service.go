@@ -19,11 +19,13 @@ func NewUserService(repo repo.UserRepository) *UserService {
 }
 
 func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error) {
+	u.ToDatabase()
 	pwd, err := bcrypt.HashPassword(u.Password)
 	if err != nil {
 		return nil, nil, err
 	}
 	u.Password = pwd
+
 	user, err := s.repo.SignUp(u)
 	if err != nil {
 		return nil, nil, err

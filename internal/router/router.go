@@ -50,7 +50,7 @@ func (s *Router) Start() error {
 				r.Get("/me", s.handlers.User.Me)
 				r.Get("/refresh", s.handlers.User.Refresh)
 			})
-		})
+		})		
 	})
 
 	return http.ListenAndServe(s.addr, c)
