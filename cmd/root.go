@@ -25,8 +25,8 @@ func Execute() {
 	storeHandler := handler.NewStoreHandler(storeService)
 
 	if err := router.New("8080", &router.Handlers{
-		User: userHandler,
-		Store: storeHandler, 
+		User:  userHandler,
+		Store: storeHandler,
 	}).Start(); err != nil {
 		log.Fatal(err)
 	}

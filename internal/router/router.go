@@ -11,7 +11,7 @@ import (
 )
 
 type Handlers struct {
-	User *handler.UserHandler
+	User  *handler.UserHandler
 	Store *handler.StoreHandler
 }
 

@@ -12,5 +12,5 @@ func NewStoreService(repo repo.StoreRepository) *StoreService {
 	return &StoreService{repo: repo}
 }
 
-func (s *StoreService) Create(){
+func (s *StoreService) Create() {
 }
