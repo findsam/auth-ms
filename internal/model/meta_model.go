@@ -13,6 +13,6 @@ func NewMeta() *Meta {
 	return &Meta{
 		CreatedAt: now,
 		UpdatedAt: now,
-		Archived: false,
+		Archived:  false,
 	}
 }

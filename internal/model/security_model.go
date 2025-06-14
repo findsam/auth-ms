@@ -1,7 +1,7 @@
 package model
 
 type Security struct {
-	EmailVerified bool   `bson:"email_verified" json:"email_verified"`
+	EmailVerified bool `bson:"email_verified" json:"email_verified"`
 }
 
 func NewSecurity() *Security {
