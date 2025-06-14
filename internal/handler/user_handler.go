@@ -44,7 +44,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "Successfully signed in",
-		"user":    user.ToPublic(),
+		"user":    user,
 		"token":   tokens.AccessToken,
 	})
 }

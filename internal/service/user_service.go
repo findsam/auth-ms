@@ -34,7 +34,7 @@ func (s *UserService) SignUp(u *model.User) (*model.User, *util.TokenPair, error
 	if err != nil {
 		return nil, nil, err
 	}
-	return user, tokens, nil
+	return user.ToPublic(), tokens, nil
 }
 
 func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.UserPublic, *util.TokenPair, error) {
