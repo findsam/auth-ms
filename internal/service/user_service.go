@@ -81,7 +81,6 @@ func (s *UserService) GetByUsername(id string) (*model.UserPublic, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get store for user: %w", err)
 	}
-	fmt.Println("Store:", store)
 	user.Store = store;
 	return user.ToPublic(), nil
 }

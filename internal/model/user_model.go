@@ -19,6 +19,7 @@ func (u *User) ToPublic() *UserPublic {
 		ID:       u.ID.Hex(),
 		Username: u.Username,
 		Email:    u.Email,
+		Store:   u.Store,
 	}
 }
 

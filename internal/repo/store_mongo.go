@@ -63,9 +63,7 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
-
 	store := &model.Store{}
-
 
 	err = col.FindOne(
 		ctx,
