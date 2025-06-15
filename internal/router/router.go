@@ -54,7 +54,7 @@ func (s *Router) Start() error {
 		})
 
 		r.Route("/stores", func(r chi.Router) {
-			r.Group(func(r chi.Router){
+			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Post("/", s.handlers.Store.Create)
 			})

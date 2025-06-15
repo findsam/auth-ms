@@ -38,12 +38,12 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	}
 
 	store := &model.Store{
-		OwnerId:      bson.ObjectID(ownerID),
-		Name:         "Default Store",
-		Description:  "This is a default store",
+		OwnerId:     bson.ObjectID(ownerID),
+		Name:        "Default Store",
+		Description: "This is a default store",
 	}
-	
-	_, err = col.InsertOne(ctx, store);
+
+	_, err = col.InsertOne(ctx, store)
 
 	if err != nil {
 		return nil, err
