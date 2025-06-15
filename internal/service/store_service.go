@@ -14,6 +14,9 @@ func NewStoreService(repo repo.StoreRepository) *StoreService {
 }
 
 func (s *StoreService) Create() (*model.Store, error) {
-	return nil, nil
-
+	store, err := s.repo.Create()
+	if err != nil {
+		return nil, err
+	}
+	return store, nil
 }

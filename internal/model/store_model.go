@@ -1,7 +1,9 @@
 package model
 
+import "go.mongodb.org/mongo-driver/v2/bson"
+
 type Store struct { 
-	ID          string `json:"id" bson:"_id"`
+	ID       	bson.ObjectID `bson:"_id,omitempty" json:"id"`
 	Name        string `json:"name" bson:"name"`
 	Description string `json:"description" bson:"description"`
 }
