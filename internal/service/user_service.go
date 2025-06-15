@@ -13,7 +13,6 @@ import (
 type UserService struct {
 	repo repo.UserRepository
 	storeRepo repo.StoreRepository
-
 }
 
 func NewUserService(repo repo.UserRepository, storeRepo repo.StoreRepository) *UserService {
@@ -72,17 +71,19 @@ func (s *UserService) GetById(id string) (*model.UserPublic, error) {
 	return user.ToPublic(), nil
 }
 
-func (s *UserService) GetByUsername(id string) (*model.UserPublic, error) {
+func (s *UserService) GetByUsername(id string) (*model.UserPublic, *model.Store, error) {
 	user, err := s.repo.GetByUsername(id)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get user by username: %w", err)
+		return nil, nil, fmt.Errorf("failed to get user by username: %w", err)
 	}
+
 	store, err := s.storeRepo.GetById(user.ID.Hex())
+
 	if err != nil {
-		return nil, fmt.Errorf("failed to get store for user: %w", err)
+		return nil, nil, fmt.Errorf("failed to get store by user id: %w", err)
 	}
-	user.Store = store;
-	return user.ToPublic(), nil
+
+	return user.ToPublic(), store, nil
 }
 
 func (s *UserService) Me(t string) (*model.UserPublic, error) {

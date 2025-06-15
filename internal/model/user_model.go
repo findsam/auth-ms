@@ -11,15 +11,12 @@ type User struct {
 	Username string        `bson:"username" json:"username" validate:"required,min=4,max=18,alphanum"`
 	Meta     *Meta         `bson:"meta" json:"meta"`
 	Security *Security     `bson:"security" json:"security"`
-	Store    *Store        `bson:"store,omitempty" json:"store,omitempty"`
 }
 
 func (u *User) ToPublic() *UserPublic {
 	return &UserPublic{
 		ID:       u.ID.Hex(),
 		Username: u.Username,
-		Email:    u.Email,
-		Store:   u.Store,
 	}
 }
 
@@ -36,6 +33,4 @@ type UserSignInRequest struct {
 type UserPublic struct {
 	ID       string `bson:"_id,omitempty" json:"id"`
 	Username string `bson:"username" json:"username"`
-	Email    string `bson:"email" json:"email"`
-	Store   *Store `bson:"store,omitempty" json:"store,omitempty"`
 }

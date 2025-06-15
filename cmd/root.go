@@ -24,10 +24,13 @@ func Execute() {
 	userService := service.NewUserService(userRepo, storeRepo)
 	userHandler := handler.NewUserHandler(userService)
 
-	if err := router.New("8080", &router.Handlers{
+	router := router.New("8080", &router.Handlers{
 		User:  userHandler,
 		Store: storeHandler,
-	}).Start(); err != nil {
+	})
+
+	err = router.Start()
+	if err != nil {
 		log.Fatal(err)
 	}
 }
