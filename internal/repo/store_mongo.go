@@ -37,12 +37,12 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
-	
+
 	store := &model.Store{
 		OwnerId:     bson.ObjectID(ownerID),
 		Name:        "Default Store",
 		Description: "This is a default store",
-		Tiers:       &[]model.Tier{
+		Tiers: &[]model.Tier{
 			{
 				Amount:      1000,
 				Description: "Basic Tier",
@@ -54,7 +54,7 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 				Benefits:    []string{"Access to all features", "Priority support", "Monthly reports"},
 			},
 		},
-		Meta:        model.NewMeta(),
+		Meta: model.NewMeta(),
 	}
 
 	_, err = col.InsertOne(ctx, store)
@@ -65,7 +65,6 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 
 	return store, nil
 }
-
 
 func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

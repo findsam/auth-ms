@@ -100,11 +100,10 @@ func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
-
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "User data retrieved successfully",
 		"user":    user,
-		"store": store,
+		"store":   store,
 	})
 }
 

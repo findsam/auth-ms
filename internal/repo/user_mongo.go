@@ -49,7 +49,7 @@ func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 	}
 
 	inserted, err := u.GetByEmail(user.Email)
-	
+
 	if err != nil {
 		return nil, err
 	}

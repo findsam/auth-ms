@@ -11,7 +11,7 @@ import (
 )
 
 type UserService struct {
-	repo repo.UserRepository
+	repo      repo.UserRepository
 	storeRepo repo.StoreRepository
 }
 
