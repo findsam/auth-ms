@@ -12,10 +12,12 @@ import (
 
 type UserService struct {
 	repo repo.UserRepository
+	storeRepo repo.StoreRepository
+
 }
 
-func NewUserService(repo repo.UserRepository) *UserService {
-	return &UserService{repo: repo}
+func NewUserService(repo repo.UserRepository, storeRepo repo.StoreRepository) *UserService {
+	return &UserService{repo: repo, storeRepo: storeRepo}
 }
 
 func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair, error) {
@@ -75,6 +77,12 @@ func (s *UserService) GetByUsername(id string) (*model.UserPublic, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by username: %w", err)
 	}
+	store, err := s.storeRepo.GetById(user.ID.Hex())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get store for user: %w", err)
+	}
+	fmt.Println("Store:", store)
+	user.Store = store;
 	return user.ToPublic(), nil
 }
 

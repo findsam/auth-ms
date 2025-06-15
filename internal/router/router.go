@@ -29,7 +29,7 @@ func New(addr string, h *Handlers) *Router {
 
 func (s *Router) Start() error {
 	c := chi.NewRouter()
-	c.Use(middleware.Logger)
+	// c.Use(middleware.Logger)
 	c.Use(middleware.URLFormat)
 	c.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
@@ -43,8 +43,8 @@ func (s *Router) Start() error {
 			r.Post("/sign-up", s.handlers.User.SignUp)
 			r.Post("/sign-in", s.handlers.User.SignIn)
 			r.Route("/user", func(r chi.Router) {
-				r.Get("/{id:[a-f0-9]{24}}", s.handlers.User.GetById)
-				r.Get("/{username:[^a-f0-9].*}", s.handlers.User.GetByUsername)
+				r.Get("/id/{id}", s.handlers.User.GetById)
+				r.Get("/username/{username}", s.handlers.User.GetByUsername)
 			})
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)

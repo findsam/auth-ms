@@ -16,13 +16,13 @@ func Execute() {
 		log.Fatal(err)
 	}
 
-	userRepo := repo.NewUserRepositoryImpl(db)
-	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(userService)
-
 	storeRepo := repo.NewStoreRepositoryImpl(db)
 	storeService := service.NewStoreService(storeRepo)
 	storeHandler := handler.NewStoreHandler(storeService)
+
+	userRepo := repo.NewUserRepositoryImpl(db)
+	userService := service.NewUserService(userRepo, storeRepo)
+	userHandler := handler.NewUserHandler(userService)
 
 	if err := router.New("8080", &router.Handlers{
 		User:  userHandler,
