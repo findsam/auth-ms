@@ -17,10 +17,10 @@ func NewStoreHandler(storeHandler *service.StoreService) *StoreHandler {
 }
 
 func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
-	store, err := h.service.Create()
+	uid := r.Context().Value("uid").(string)
+	store, err := h.service.Create(uid)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
 	}
-
 	SendSuccess(w, r, http.StatusCreated, store)
 }

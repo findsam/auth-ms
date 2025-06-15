@@ -13,8 +13,8 @@ func NewStoreService(repo repo.StoreRepository) *StoreService {
 	return &StoreService{repo: repo}
 }
 
-func (s *StoreService) Create() (*model.Store, error) {
-	store, err := s.repo.Create()
+func (s *StoreService) Create(oid string) (*model.Store, error) {
+	store, err := s.repo.Create(oid)
 	if err != nil {
 		return nil, err
 	}
