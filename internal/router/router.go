@@ -52,6 +52,10 @@ func (s *Router) Start() error {
 				r.Get("/refresh", s.handlers.User.Refresh)
 			})
 		})
+
+		r.Route("/stores", func(r chi.Router) {
+			r.Post("/", s.handlers.Store.Create)
+		})
 	})
 
 	return http.ListenAndServe(s.addr, c)

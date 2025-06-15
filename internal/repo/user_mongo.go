@@ -11,9 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-const (
-	USER_DB_NAME = "users"
-)
+const USER_DB_NAME = "users"
 
 type UserRepository interface {
 	SignUp(user *model.User) (*model.User, error)

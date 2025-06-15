@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/repo"
 )
 
@@ -12,5 +13,7 @@ func NewStoreService(repo repo.StoreRepository) *StoreService {
 	return &StoreService{repo: repo}
 }
 
-func (s *StoreService) Create() {
+func (s *StoreService) Create() (*model.Store, error) {
+	return nil, nil
+
 }

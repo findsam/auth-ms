@@ -16,4 +16,11 @@ func NewStoreHandler(storeHandler *service.StoreService) *StoreHandler {
 	}
 }
 
-func (h *StoreHandler) GetStore(w http.ResponseWriter, r *http.Request) {}
+func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
+	store, err := h.service.Create()
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+	}
+
+	SendSuccess(w, r, http.StatusCreated, store)
+}
