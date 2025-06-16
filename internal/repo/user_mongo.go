@@ -110,6 +110,9 @@ func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error)
 	).Decode(user)
 
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("user with username %s not found", username)
+		}
 		return nil, err
 	}
 

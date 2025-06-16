@@ -74,13 +74,13 @@ func (s *UserService) GetById(id string) (*model.UserPublic, error) {
 func (s *UserService) GetByUsername(id string) (*model.UserPublic, *model.Store, error) {
 	user, err := s.repo.GetByUsername(id)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to get user by username: %w", err)
+		return nil, nil, err
 	}
 
 	store, err := s.storeRepo.GetById(user.ID.Hex())
 
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to get store by user id: %w", err)
+		return nil, nil, err
 	}
 
 	return user.ToPublic(), store, nil
