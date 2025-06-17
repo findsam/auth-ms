@@ -58,6 +58,9 @@ func (s *Router) Start() error {
 				r.Use(WithJWT)
 				r.Post("/", s.handlers.Store.Create)
 			})
+			r.Route("/store", func(r chi.Router) {
+				r.Get("/{id}", s.handlers.Store.GetById)
+			})
 		})
 	})
 

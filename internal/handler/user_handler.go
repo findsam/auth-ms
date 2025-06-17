@@ -94,7 +94,7 @@ func (h *UserHandler) GetById(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
-	user, store, err := h.service.GetByUsername(username)
+	user, err := h.service.GetByUsername(username)
 	if err != nil {
 		fmt.Println(err)
 		SendError(w, r, http.StatusNotFound, err)
@@ -103,7 +103,6 @@ func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 	SendSuccess(w, r, http.StatusOK, map[string]any{
 		"message": "User data retrieved successfully",
 		"user":    user,
-		"store":   store,
 	})
 }
 

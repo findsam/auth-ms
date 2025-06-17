@@ -20,3 +20,12 @@ func (s *StoreService) Create(oid string) (*model.Store, error) {
 	}
 	return store, nil
 }
+
+
+func (s *StoreService) GetById(id string) (*model.Store, error) {
+	store, err := s.repo.GetById(id)
+	if err != nil {
+		return nil, err
+	}
+	return store, nil
+}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/service"
+	"github.com/go-chi/chi/v5"
 )
 
 type StoreHandler struct {
@@ -23,4 +24,14 @@ func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
 		SendError(w, r, http.StatusInternalServerError, err)
 	}
 	SendSuccess(w, r, http.StatusCreated, store)
+}
+
+func (h *StoreHandler) GetById(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	store, err := h.service.GetById(id)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+	SendSuccess(w, r, http.StatusOK, store)
 }
