@@ -97,7 +97,7 @@ func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 	user, store, err := h.service.GetByUsername(username)
 	if err != nil {
 		fmt.Println(err)
-		SendError(w, r, http.StatusInternalServerError, err)
+		SendError(w, r, http.StatusNotFound, err)
 		return
 	}
 	SendSuccess(w, r, http.StatusOK, map[string]any{
