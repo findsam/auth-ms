@@ -22,13 +22,13 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	user, err := ParseBody[model.User](r)
 	if err != nil {
-		SendError(w, r, http.StatusInternalServerError, err)
+		SendErrorV(w, r, http.StatusBadRequest, err)
 		return
 	}
 
 	resp, tokens, err := h.service.SignUp(user)
 	if err != nil {
-		SendSuccess(w, r, http.StatusInternalServerError, err)
+		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
 

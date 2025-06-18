@@ -19,6 +19,17 @@ func NewUserService(repo repo.UserRepository) *UserService {
 }
 
 func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair, error) {
+
+	user, err := s.repo.GetByEmail(u.Email)
+	
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if user != nil {
+		return nil, nil, fmt.Errorf("email already exists")
+	}
+
 	u.ToDatabase()
 	pwd, err := bcrypt.HashPassword(u.Password)
 	if err != nil {
@@ -26,7 +37,7 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 	}
 	u.Password = pwd
 
-	user, err := s.repo.SignUp(u)
+	user, err = s.repo.SignUp(u)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -25,15 +25,11 @@ func NewValidator() *Validator {
 }
 
 func (v *Validator) ParseValidationErrors(err error) map[string]string {
-	if err == nil {
-		return nil
-	}
-
 	validationErrors, ok := err.(validator.ValidationErrors)
 	if !ok {
 		return map[string]string{"_general": "validation error occurred"}
 	}
-
+	
 	errors := make(map[string]string)
 	for _, e := range validationErrors {
 		field := e.Field()

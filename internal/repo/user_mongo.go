@@ -35,15 +35,7 @@ func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 	defer cancel()
 	col := u.db.Collection(USER_DB_NAME)
 
-	exists, err := u.GetByEmail(user.Email)
-	if err != nil && err != mongo.ErrNoDocuments {
-		return nil, err
-	}
-	if exists != nil {
-		return nil, fmt.Errorf("user with email %s already exists", user.Email)
-	}
-
-	_, err = col.InsertOne(ctx, user)
+	_, err := col.InsertOne(ctx, user)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +53,7 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	col := u.db.Collection(USER_DB_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
+	
 	user := new(model.User)
 	err := col.FindOne(
 		ctx,
