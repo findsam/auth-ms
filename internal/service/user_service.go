@@ -40,7 +40,7 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.UserPublic, *util.TokenPair, error) {
 	user, err := s.repo.GetByEmail(u.Email)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, fmt.Errorf("no user found")
 	}
 
 	if !bcrypt.ComparePasswords(user.Password, u.Password) {
@@ -70,7 +70,7 @@ func (s *UserService) GetById(id string) (*model.UserPublic, error) {
 	return user.ToPublic(), nil
 }
 
-func (s *UserService) GetByUsername(id string) (*model.UserPublic, error) {
+func (s *UserService) GetByUsername(id string) (*model.UserPublic,error) {
 	user, err := s.repo.GetByUsername(id)
 	if err != nil {
 		return nil, err

@@ -69,6 +69,9 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	).Decode(user)
 
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, err
+		}
 		return nil, err
 	}
 
