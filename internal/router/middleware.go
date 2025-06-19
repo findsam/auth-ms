@@ -39,12 +39,12 @@ func WithJWT(next http.Handler) http.Handler {
 				handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("expired"))
 				return
 			}
-			handler.SendError(w, r, http.StatusUnauthorized, err)
+			handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("invalid token"))
 			return
 		}
 
 		if !t.Valid {
-			handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("token is not valid"))
+			handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("invalid token"))
 			return
 		}
 
