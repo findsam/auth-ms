@@ -1,11 +1,9 @@
 package model
 
-import (
-	"go.mongodb.org/mongo-driver/v2/bson"
-)
+import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
-	ID       bson.ObjectID `bson:"_id,omitempty" json:"id"`
+	ID       primitive.ObjectID  `bson:"_id,omitempty" json:"id"`
 	Email    string        `bson:"email" json:"email" validate:"required,email"`
 	Password string        `bson:"password" json:"password" validate:"required,min=6,containsany=!@#$%^&*"`
 	Username string        `bson:"username" json:"username" validate:"required,min=3,max=18,alphanum"`

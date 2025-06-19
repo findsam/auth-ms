@@ -39,7 +39,7 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	}
 
 	store := &model.Store{
-		OwnerId:     bson.ObjectID(ownerID),
+		OwnerId:     ownerID,
 		Name:        "Default Store",
 		Description: "This is a default store",
 		Tiers: &[]model.Tier{
@@ -48,20 +48,22 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 				Description: "Basic Tier",
 				Benefits:    []string{"Access to basic features", "Email support"},
 			},
-			{
-				Amount:      5000,
-				Description: "Premium Tier",
-				Benefits:    []string{"Access to all features", "Priority support", "Monthly reports"},
-			},
 		},
 		Meta: model.NewMeta(),
 	}
 
-	_, err = col.InsertOne(ctx, store)
+	inserted, err := col.InsertOne(ctx, store)
 
 	if err != nil {
 		return nil, err
 	}
+	if oid, ok := inserted.InsertedID.(primitive.ObjectID); ok {
+		fmt.Printf("Inserted store with ID: %s\n", oid.Hex())
+	} else {
+		return nil, fmt.Errorf("failed to convert InsertedID to ObjectID")
+	}
+
+	// store.ID = oid
 
 	return store, nil
 }
