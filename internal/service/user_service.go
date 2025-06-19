@@ -76,7 +76,7 @@ func (s *UserService) GetByEmail(e string) (*model.UserPublic, error) {
 }
 
 func (s *UserService) GetById(id string) (*model.UserPublic, error) {
-	user, err := s.repo.GetById(id)
+	user, err := s.repo.GetById(id)	
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by id: %w", err)
 	}

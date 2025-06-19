@@ -33,13 +33,12 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	defer cancel()
 	col := u.db.Collection(STORE_DB_NAME)
 
-	ownerID, err := primitive.ObjectIDFromHex(oid)
+	boid, err := bson.ObjectIDFromHex(oid)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
-
 	store := &model.Store{
-		OwnerId:     ownerID,
+		OwnerId:     boid,
 		Name:        "Default Store",
 		Description: "This is a default store",
 		Tiers: &[]model.Tier{
@@ -57,14 +56,8 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	if oid, ok := inserted.InsertedID.(primitive.ObjectID); ok {
-		fmt.Printf("Inserted store with ID: %s\n", oid.Hex())
-	} else {
-		return nil, fmt.Errorf("failed to convert InsertedID to ObjectID")
-	}
 
-	// store.ID = oid
-
+	store.ID = inserted.InsertedID.(bson.ObjectID)
 	return store, nil
 }
 

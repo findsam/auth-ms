@@ -54,13 +54,15 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	
-	user := new(model.User)
+	// user := new(model.User)
+	user := &model.User{}
 	err := col.FindOne(
 		ctx,
 		bson.M{"email": email},
 	).Decode(user)
 
 	if err != nil {
+		fmt.Printf("Error finding user by ID: %v\n", err)
 		if err == mongo.ErrNoDocuments {
 			return nil, nil
 		}
@@ -79,14 +81,15 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
-	user := new(model.User)
 
+	user := new(model.User)
 	err = col.FindOne(
 		ctx,
-		bson.M{"_id": bson.ObjectID(oid)},
+		bson.M{"_id": oid},
 	).Decode(user)
 
 	if err != nil {
+		fmt.Printf("Error finding user by ID: %v\n", err)
 		return nil, err
 	}
 
@@ -98,12 +101,12 @@ func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	user := new(model.User)
-
 	err := col.FindOne(
 		ctx,
 		bson.M{"username": username},
-	).Decode(user)
-
+		).Decode(user)
+		
+	fmt.Printf("%+v\n", user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, fmt.Errorf("resource not found")
