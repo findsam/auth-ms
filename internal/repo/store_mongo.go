@@ -84,7 +84,7 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, fmt.Errorf("resource not found")
+			return nil, fmt.Errorf("store not found")
 		}
 		return nil, err
 	}

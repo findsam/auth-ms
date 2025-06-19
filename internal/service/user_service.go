@@ -19,9 +19,7 @@ func NewUserService(repo repo.UserRepository) *UserService {
 }
 
 func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair, error) {
-
 	user, err := s.repo.GetByEmail(u.Email)
-	
 	if err != nil {
 		return nil, nil, err
 	}
@@ -51,6 +49,10 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.UserPublic, *util.TokenPair, error) {
 	user, err := s.repo.GetByEmail(u.Email)
 	if err != nil {
+		return nil, nil, err
+	}
+
+	if user == nil { 
 		return nil, nil, fmt.Errorf("no user found")
 	}
 
