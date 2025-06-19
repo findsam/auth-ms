@@ -53,7 +53,7 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	col := u.db.Collection(USER_DB_NAME)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	// user := new(model.User)
 	user := &model.User{}
 	err := col.FindOne(
@@ -104,8 +104,8 @@ func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error)
 	err := col.FindOne(
 		ctx,
 		bson.M{"username": username},
-		).Decode(user)
-		
+	).Decode(user)
+
 	fmt.Printf("%+v\n", user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {

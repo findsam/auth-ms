@@ -11,7 +11,7 @@ import (
 )
 
 type UserService struct {
-	repo      repo.UserRepository
+	repo repo.UserRepository
 }
 
 func NewUserService(repo repo.UserRepository) *UserService {
@@ -52,7 +52,7 @@ func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.UserPublic, *ut
 		return nil, nil, err
 	}
 
-	if user == nil { 
+	if user == nil {
 		return nil, nil, fmt.Errorf("no user found")
 	}
 
@@ -76,14 +76,14 @@ func (s *UserService) GetByEmail(e string) (*model.UserPublic, error) {
 }
 
 func (s *UserService) GetById(id string) (*model.UserPublic, error) {
-	user, err := s.repo.GetById(id)	
+	user, err := s.repo.GetById(id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by id: %w", err)
 	}
 	return user.ToPublic(), nil
 }
 
-func (s *UserService) GetByUsername(id string) (*model.UserPublic,error) {
+func (s *UserService) GetByUsername(id string) (*model.UserPublic, error) {
 	user, err := s.repo.GetByUsername(id)
 	if err != nil {
 		return nil, err

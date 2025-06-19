@@ -23,7 +23,7 @@ func SendSuccess(w http.ResponseWriter, r *http.Request, status int, data any) {
 	render.JSON(w, r, data)
 }
 
-func SendErrorV(w http.ResponseWriter, r *http.Request, status int, err error){
+func SendErrorV(w http.ResponseWriter, r *http.Request, status int, err error) {
 	if validationErrs := validator.ParseValidationErrors(err); validationErrs != nil {
 		render.Status(r, status)
 		render.JSON(w, r, map[string]any{
@@ -34,7 +34,6 @@ func SendErrorV(w http.ResponseWriter, r *http.Request, status int, err error){
 		SendError(w, r, status, err)
 	}
 }
-
 
 func ParseBody[T any](r *http.Request) (*T, error) {
 	var data T
