@@ -24,27 +24,37 @@ func NewValidator() *Validator {
 	return &Validator{v}
 }
 
-func (v *Validator) ParseValidationErrors(err error) map[string]string {
+func (v *Validator) ParseValidationErrors(err error) []map[string]string {
 	validationErrors, ok := err.(validator.ValidationErrors)
 	if !ok {
-		return map[string]string{"_general": "validation error occurred"}
-	}
-	
-	errors := make(map[string]string)
-	for _, e := range validationErrors {
-		field := e.Field()
-		switch e.Tag() {
-		case "required":
-			errors[field] = field + " is required"
-		case "email":
-			errors[field] = field + " must be a valid email address"
-		case "min":
-			errors[field] = fmt.Sprintf("%s must be at least %s characters long", field, e.Param())
-		case "containsany":
-			errors[field] = fmt.Sprintf("%s must contain at least one of: %s", field, e.Param())
-		default:
-			errors[field] = fmt.Sprintf("%s is invalid", field)
+		return []map[string]string{
+			{"key": "_general", "value": "validation error occurred"},
 		}
 	}
+
+	var errors []map[string]string
+	for _, e := range validationErrors {
+		field := e.Field()
+		var message string
+
+		switch e.Tag() {
+		case "required":
+			message = field + " is required"
+		case "email":
+			message = field + " must be a valid email address"
+		case "min":
+			message = fmt.Sprintf("%s must be at least %s characters long", field, e.Param())
+		case "containsany":
+			message = fmt.Sprintf("%s must contain at least one of: %s", field, e.Param())
+		default:
+			message = fmt.Sprintf("%s is invalid", field)
+		}
+
+		errors = append(errors, map[string]string{
+			"key":   field,
+			"value": message,
+		})
+	}
+
 	return errors
 }
