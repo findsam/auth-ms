@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -61,9 +62,8 @@ func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
 	).Decode(user)
 
 	if err != nil {
-		fmt.Printf("Error finding user by ID: %v\n", err)
-		if err == mongo.ErrNoDocuments {
-			return nil, nil
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, fmt.Errorf("user not found")
 		}
 		return nil, err
 	}

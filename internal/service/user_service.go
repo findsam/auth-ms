@@ -20,12 +20,12 @@ func NewUserService(repo repo.UserRepository) *UserService {
 
 func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair, error) {
 	user, err := s.repo.GetByEmail(u.Email)
-	if err != nil {
+	if err != nil && err.Error() != "user not found" {
 		return nil, nil, err
 	}
 
 	if user != nil {
-		return nil, nil, fmt.Errorf("email already exists")
+		return  nil, nil, fmt.Errorf("user already exists")
 	}
 
 	u.ToDatabase()
@@ -39,6 +39,7 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 	if err != nil {
 		return nil, nil, err
 	}
+
 	tokens, err := token.GenerateTokens(user.ID.Hex())
 	if err != nil {
 		return nil, nil, err
