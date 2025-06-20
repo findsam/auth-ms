@@ -38,8 +38,6 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	}
 	store := &model.Store{
 		OwnerId:     boid,
-		Name:        "Default Store",
-		Description: "This is a default store",
 		Tiers: &[]model.Tier{
 			{
 				Amount:      1000,
@@ -69,7 +67,7 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
-	
+
 	store := &model.Store{}
 	err = col.FindOne(
 		ctx,
