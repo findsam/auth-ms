@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/findsam/auth-micro/internal/model"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
@@ -77,7 +76,7 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	oid, err := primitive.ObjectIDFromHex(id)
+	boid, err := bson.ObjectIDFromHex(id);
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
@@ -85,7 +84,7 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	user := new(model.User)
 	err = col.FindOne(
 		ctx,
-		bson.M{"_id": oid},
+		bson.M{"_id": boid},
 	).Decode(user)
 
 	if err != nil {
