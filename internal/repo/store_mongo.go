@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/findsam/auth-micro/internal/model"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
@@ -56,7 +55,7 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	
 	store.ID = inserted.InsertedID.(bson.ObjectID)
 	return store, nil
 }
@@ -66,15 +65,15 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	defer cancel()
 	col := u.db.Collection(STORE_DB_NAME)
 
-	ownerID, err := primitive.ObjectIDFromHex(oid)
+	boid, err := bson.ObjectIDFromHex(oid)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
+	
 	store := &model.Store{}
-
 	err = col.FindOne(
 		ctx,
-		bson.M{"owner_id": bson.ObjectID(ownerID)},
+		bson.M{"owner_id": boid},
 	).Decode(store)
 
 	if err != nil {
