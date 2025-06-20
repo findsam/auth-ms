@@ -23,6 +23,7 @@ func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
 	store, err := h.service.Create(uid)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
+		return
 	}
 	SendSuccess(w, r, http.StatusCreated, store)
 }

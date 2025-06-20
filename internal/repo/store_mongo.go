@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -75,7 +76,8 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	).Decode(store)
 
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
+		// if err == mongo.ErrNoDocuments {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, fmt.Errorf("store not found")
 		}
 		return nil, err
