@@ -25,7 +25,7 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 	}
 
 	if user != nil {
-		return  nil, nil, fmt.Errorf("user already exists")
+		return nil, nil, fmt.Errorf("user already exists")
 	}
 
 	u.ToDatabase()

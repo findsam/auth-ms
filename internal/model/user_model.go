@@ -11,9 +11,9 @@ type Socials struct {
 }
 
 type UserDetails struct {
-	Description string `bson:"description" json:"description"`
-	Location    string `bson:"location" json:"location"`
-	Socials    *Socials `bson:"socials" json:"socials"`	 
+	Description string   `bson:"description" json:"description"`
+	Location    string   `bson:"location" json:"location"`
+	Socials     *Socials `bson:"socials" json:"socials"`
 }
 
 type User struct {
@@ -21,7 +21,7 @@ type User struct {
 	Email    string        `bson:"email" json:"email" validate:"required,email"`
 	Password string        `bson:"password" json:"password" validate:"required,min=6,containsany=!@#$%^&*"`
 	Username string        `bson:"username" json:"username" validate:"required,min=3,max=18,alphanum"`
-	Socials *Socials      `bson:"socials" json:"socials"`
+	Socials  *Socials      `bson:"socials" json:"socials"`
 	Meta     *Meta         `bson:"meta" json:"meta"`
 	Security *Security     `bson:"security" json:"security"`
 }

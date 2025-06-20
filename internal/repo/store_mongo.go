@@ -38,7 +38,7 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
 	store := &model.Store{
-		OwnerId:     boid,
+		OwnerId: boid,
 		Tiers: &[]model.Tier{
 			{
 				Amount:      1000,
@@ -54,7 +54,7 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	store.ID = inserted.InsertedID.(bson.ObjectID)
 	return store, nil
 }

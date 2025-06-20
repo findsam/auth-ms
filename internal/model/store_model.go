@@ -3,10 +3,10 @@ package model
 import "go.mongodb.org/mongo-driver/v2/bson"
 
 type Store struct {
-	ID          bson.ObjectID `bson:"_id,omitempty" json:"id"`
-	OwnerId     bson.ObjectID `bson:"owner_id,omitempty" json:"owner_id"`
-	Tiers       *[]Tier       `json:"tiers" bson:"tiers"`
-	Meta        *Meta         `json:"meta" bson:"meta"`
+	ID      bson.ObjectID `bson:"_id,omitempty" json:"id"`
+	OwnerId bson.ObjectID `bson:"owner_id,omitempty" json:"owner_id"`
+	Tiers   *[]Tier       `json:"tiers" bson:"tiers"`
+	Meta    *Meta         `json:"meta" bson:"meta"`
 }
 
 type Tier struct {

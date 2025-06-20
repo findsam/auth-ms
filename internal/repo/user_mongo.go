@@ -76,7 +76,7 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	boid, err := bson.ObjectIDFromHex(id);
+	boid, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}

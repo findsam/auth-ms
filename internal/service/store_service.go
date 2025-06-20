@@ -22,7 +22,7 @@ func (s *StoreService) Create(oid string) (*model.Store, error) {
 	}
 
 	if store != nil {
-		return  nil, fmt.Errorf("store already exists")
+		return nil, fmt.Errorf("store already exists")
 	}
 
 	store, err = s.repo.Create(oid)
