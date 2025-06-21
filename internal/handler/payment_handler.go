@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/service"
+	"github.com/go-chi/chi/v5"
 )
 
 type PaymentHandler struct {
@@ -19,17 +19,23 @@ func NewPaymentHandler(service *service.PaymentService) *PaymentHandler {
 }
 
 func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
-	body, err := ParseBody[model.Payment](r)
+	body, err := ParseBody[model.CreatePaymentBody](r)
 	if err != nil {
 		SendError(w, r, http.StatusBadRequest, err)
 		return
 	}
-	payment, err := h.service.Create(body)
+
+	payment, err := h.service.Create(body.StoreId)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
-	fmt.Printf("%+v\n", payment)
 	SendSuccess(w, r, http.StatusCreated, payment)
+}
+
+func (h *PaymentHandler) GetByStoreId(w http.ResponseWriter, r *http.Request) {
+	sid := chi.URLParam(r, "id")
+	payments, err := h.service.GetByStoreId(sid)
+
 }

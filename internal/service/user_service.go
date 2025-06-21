@@ -28,13 +28,14 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 		return nil, nil, fmt.Errorf("user already exists")
 	}
 
-	u.ToDatabase()
 	pwd, err := bcrypt.HashPassword(u.Password)
 	if err != nil {
 		return nil, nil, err
 	}
-	u.Password = pwd
 
+	u.Password = pwd
+	u.ToDatabase()
+	
 	user, err = s.repo.SignUp(u)
 	if err != nil {
 		return nil, nil, err

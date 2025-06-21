@@ -14,6 +14,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface{
 	Create(sid string) (*model.Payment, error)
+	GetByStoreId(sid string) ([]*model.Payment, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -51,3 +52,9 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 	fmt.Printf("%v\n", payment)
 	return payment, nil
 }
+
+func (u *PaymentRepositoryImpl) GetBySoreId(sid string) ([]*model.Payment, error) {
+	return nil, nil
+}
+
+

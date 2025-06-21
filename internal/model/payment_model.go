@@ -5,6 +5,10 @@ import (
 )
 
 
+type CreatePaymentBody struct {
+    StoreId string `json:"store_id" validate:"required"`
+}
+
 type Payment struct {
     ID      bson.ObjectID `bson:"_id,omitempty" json:"id"`
     StoreId bson.ObjectID `bson:"store_id" json:"store_id" validate:"required"`

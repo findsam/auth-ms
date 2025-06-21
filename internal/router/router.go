@@ -68,6 +68,9 @@ func (s *Router) Start() error {
 			r.Group(func(r chi.Router) {
 				r.Post("/", s.handlers.Payment.Create)
 			})
+			r.Route("/{id}", func(r chi.Router) {
+				r.Get("/", s.handlers.Payment.GetByStoreId)
+			})
 		})
 	})
 
