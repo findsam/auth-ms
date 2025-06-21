@@ -7,5 +7,5 @@ type PaymentService struct {
 }
 
 func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
- return &PaymentService{repo: repo}
+	return &PaymentService{repo: repo}
 }

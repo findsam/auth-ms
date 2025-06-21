@@ -18,16 +18,15 @@ func Execute() error {
 	}
 
 	deps := &router.Handlers{
-		Store: buildStoreHandler(db),
+		Store:   buildStoreHandler(db),
 		Payment: buildPaymentHandler(db),
-		User: buildUserHandler(db),
+		User:    buildUserHandler(db),
 	}
 
 	router := router.New("8080", deps)
 	return router.Start()
 
 }
-
 
 func buildStoreHandler(db *mongo.Database) *handler.StoreHandler {
 	storeRepo := repo.NewStoreRepositoryImpl(db)

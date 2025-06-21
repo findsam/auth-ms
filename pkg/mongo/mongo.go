@@ -11,9 +11,7 @@ import (
 
 var DB *mongo.Client
 
-const (
-	DBNAME = "auth"
-)
+const DBNAME = "auth"
 
 func New() (*mongo.Database, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

@@ -6,7 +6,7 @@ import (
 
 const PAYMENT_DB_NAME = "payment"
 
-type PaymentRepository interface {}
+type PaymentRepository interface{}
 
 type PaymentRepositoryImpl struct {
 	db *mongo.Database
