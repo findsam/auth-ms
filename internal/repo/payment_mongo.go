@@ -53,8 +53,34 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 	return payment, nil
 }
 
-func (u *PaymentRepositoryImpl) GetBySoreId(sid string) ([]*model.Payment, error) {
-	return nil, nil
+func (u *PaymentRepositoryImpl) GetByStoreId(sid string) ([]*model.Payment, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	bsid, err := bson.ObjectIDFromHex(sid)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
+	}
+
+	col := u.db.Collection(PAYMENT_DB_NAME)
+	filter := bson.M{"store_id": bsid}
+	
+	cursor, err := col.Find(ctx, filter)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find payments: %w", err)
+	}
+	defer cursor.Close(ctx)
+
+	var payments []*model.Payment
+	if err = cursor.All(ctx, &payments); err != nil {
+		return nil, fmt.Errorf("failed to decode documents: %w", err)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, fmt.Errorf("cursor iteration error: %w", err)
+	}
+
+	fmt.Printf("Found %d payments for store ID: %s\n", len(payments), sid)
+
+	return payments, nil
 }
-
-

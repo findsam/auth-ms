@@ -37,5 +37,10 @@ func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
 func (h *PaymentHandler) GetByStoreId(w http.ResponseWriter, r *http.Request) {
 	sid := chi.URLParam(r, "id")
 	payments, err := h.service.GetByStoreId(sid)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+	SendSuccess(w, r, http.StatusOK, payments)
 
 }
