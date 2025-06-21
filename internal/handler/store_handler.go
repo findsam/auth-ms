@@ -12,9 +12,9 @@ type StoreHandler struct {
 	service *service.StoreService
 }
 
-func NewStoreHandler(storeHandler *service.StoreService) *StoreHandler {
+func NewStoreHandler(service *service.StoreService) *StoreHandler {
 	return &StoreHandler{
-		service: storeHandler,
+		service: service,
 	}
 }
 

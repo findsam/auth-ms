@@ -24,6 +24,11 @@ func Execute() {
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 
+
+	paymentRepo := repo.NewPaymentRepositoryImpl(db)
+	paymentService := service.NewPaymentService(paymentRepo)
+	paymentHandler := handler.NewPaymentHandler(paymentService)
+
 	router := router.New("8080", &router.Handlers{
 		User:  userHandler,
 		Store: storeHandler,
