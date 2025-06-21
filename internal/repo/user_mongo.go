@@ -35,18 +35,13 @@ func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 	defer cancel()
 	col := u.db.Collection(USER_DB_NAME)
 
-	_, err := col.InsertOne(ctx, user)
+	inserted, err := col.InsertOne(ctx, user)
 	if err != nil {
 		return nil, err
 	}
 
-	inserted, err := u.GetByEmail(user.Email)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return inserted, nil
+	user.ID = inserted.InsertedID.(bson.ObjectID)
+	return user, nil
 }
 
 func (u *UserRepositoryImpl) GetByEmail(email string) (*model.User, error) {
