@@ -16,6 +16,8 @@ func config() *util.Config {
 		DB_NAME:    getEnv("DB_NAME", ""),
 		JWT_SECRET: getEnv("JWT_SECRET", ""),
 		MONGO_URI:  getEnv("MONGO_URI", ""),
+		STRIPE_PWD: getEnv("STRIPE_PWD", ""),
+		STRIPE_PUBLISHABLE_KEY: getEnv("STRIPE_PUBLISHABLE_KEY", ""),
 	}
 }
 

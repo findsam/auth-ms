@@ -9,3 +9,8 @@ type PaymentService struct {
 func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
 	return &PaymentService{repo: repo}
 }
+
+
+func (s *PaymentService) Create(amount float64, currency string) (string, error) {
+
+}

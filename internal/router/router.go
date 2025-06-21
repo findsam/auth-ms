@@ -65,7 +65,10 @@ func (s *Router) Start() error {
 		})
 
 		r.Route("/payments", func(r chi.Router) {
-			r.Route("/{id}", func(r chi.Router) {})
+			r.Group(func(r chi.Router) {
+				r.Use(WithJWT)
+				r.Post("/", s.handlers.Payment.Create)
+			})
 		})
 	})
 
