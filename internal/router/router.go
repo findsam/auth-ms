@@ -13,6 +13,7 @@ import (
 type Handlers struct {
 	User  *handler.UserHandler
 	Store *handler.StoreHandler
+	Payment *handler.PaymentHandler
 }
 
 type Router struct {
@@ -64,9 +65,7 @@ func (s *Router) Start() error {
 		})
 
 		r.Route("/payments", func (r chi.Router) { 
-			r.Route("/{id}", func(r chi.Router) {
-				
-			})		
+			r.Route("/{id}", func(r chi.Router) {})		
 		})
 	})
 
