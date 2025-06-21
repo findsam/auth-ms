@@ -62,6 +62,10 @@ func (s *Router) Start() error {
 				r.Get("/{id}", s.handlers.Store.GetById)
 			})
 		})
+
+		r.Route("/payments", func (r chi.Router) { 
+			
+		})
 	})
 
 	return http.ListenAndServe(s.addr, c)
