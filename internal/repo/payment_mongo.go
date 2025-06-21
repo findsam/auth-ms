@@ -49,7 +49,6 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 	}	
 	
 	payment.ID = inserted.InsertedID.(bson.ObjectID)
-	fmt.Printf("%v\n", payment)
 	return payment, nil
 }
 

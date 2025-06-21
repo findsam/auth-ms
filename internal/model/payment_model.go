@@ -7,6 +7,8 @@ import (
 
 type CreatePaymentBody struct {
     StoreId string `json:"store_id" validate:"required"`
+    OwnerId  string `json:"owner_id" validate:"required"`
+    Sub int `json:"amount" validate:"required"` 
 }
 
 type Payment struct {

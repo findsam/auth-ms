@@ -5,7 +5,6 @@ import (
 
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/service"
-	"github.com/go-chi/chi/v5"
 )
 
 type PaymentHandler struct {
@@ -25,22 +24,11 @@ func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payment, err := h.service.Create(body.StoreId)
+	payment, err := h.service.Create(body)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
 	SendSuccess(w, r, http.StatusCreated, payment)
-}
-
-func (h *PaymentHandler) GetByStoreId(w http.ResponseWriter, r *http.Request) {
-	sid := chi.URLParam(r, "id")
-	payments, err := h.service.GetByStoreId(sid)
-	if err != nil {
-		SendError(w, r, http.StatusInternalServerError, err)
-		return
-	}
-	SendSuccess(w, r, http.StatusOK, payments)
-
 }
