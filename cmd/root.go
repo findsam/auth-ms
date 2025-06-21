@@ -32,6 +32,7 @@ func Execute() {
 	router := router.New("8080", &router.Handlers{
 		User:  userHandler,
 		Store: storeHandler,
+		Payment: paymentHandler,
 	})
 
 	err = router.Start()
