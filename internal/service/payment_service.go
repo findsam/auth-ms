@@ -15,7 +15,7 @@ func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
 
 
 func (s *PaymentService) Create(*model.Payment) (*model.Payment, error) {
-	payment, err := s.repo.Create()
+	payment, err := s.repo.Create("68568115de41192bde902111")
 	if err != nil {
 		return nil, err
 	}

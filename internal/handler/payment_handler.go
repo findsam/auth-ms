@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/model"
@@ -28,5 +29,7 @@ func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
+
+	fmt.Printf("%+v\n", payment)
 	SendSuccess(w, r, http.StatusCreated, payment)
 }
