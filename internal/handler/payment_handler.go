@@ -23,8 +23,10 @@ func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
 		SendError(w, r, http.StatusBadRequest, err)
 		return
 	}
-
-	paymentIntent, err := h.service.Create()
-
-	SendSuccess(w, r, http.StatusCreated, "Success")
+	payment, err := h.service.Create(body)
+	if err != nil {
+		SendError(w, r, http.StatusInternalServerError, err)
+		return
+	}
+	SendSuccess(w, r, http.StatusCreated, payment)
 }
