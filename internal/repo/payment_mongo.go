@@ -39,18 +39,15 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 	payment := &model.Payment{
 		StoreId: bsid,
 		Amount: 1000,
+		Meta: model.NewMeta(),
 	}
 
 	inserted, err := col.InsertOne(ctx, payment)
 	if err != nil { 
 		return nil, err
 	}	
-
-
-	fmt.Println("Inserted ID:", inserted.InsertedID)
-
+	
 	payment.ID = inserted.InsertedID.(bson.ObjectID)
-
 	fmt.Printf("%v\n", payment)
 	return payment, nil
 }
