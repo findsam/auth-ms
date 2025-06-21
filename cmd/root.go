@@ -27,9 +27,9 @@ func Execute() error {
 	paymentHandler := handler.NewPaymentHandler(paymentService)
 
 	deps := &router.Handlers{
-		Store: storeHandler,
+		Store:   storeHandler,
 		Payment: paymentHandler,
-		User: userHandler,
+		User:    userHandler,
 	}
 
 	router := router.New("8080", deps)

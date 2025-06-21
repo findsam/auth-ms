@@ -12,7 +12,7 @@ import (
 
 const PAYMENT_DB_NAME = "payment"
 
-type PaymentRepository interface{
+type PaymentRepository interface {
 	Create(sid string) (*model.Payment, error)
 	GetByStoreId(sid string) ([]*model.Payment, error)
 }
@@ -39,15 +39,15 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 
 	payment := &model.Payment{
 		StoreId: bsid,
-		Amount: 1000,
-		Meta: model.NewMeta(),
+		Amount:  1000,
+		Meta:    model.NewMeta(),
 	}
 
 	inserted, err := col.InsertOne(ctx, payment)
-	if err != nil { 
+	if err != nil {
 		return nil, err
-	}	
-	
+	}
+
 	payment.ID = inserted.InsertedID.(bson.ObjectID)
 	return payment, nil
 }
@@ -63,7 +63,7 @@ func (u *PaymentRepositoryImpl) GetByStoreId(sid string) ([]*model.Payment, erro
 
 	col := u.db.Collection(PAYMENT_DB_NAME)
 	filter := bson.M{"store_id": bsid}
-	
+
 	cursor, err := col.Find(ctx, filter)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find payments: %w", err)

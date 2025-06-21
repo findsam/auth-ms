@@ -11,12 +11,12 @@ var Envs = config()
 
 func config() *util.Config {
 	return &util.Config{
-		DB_USER:    getEnv("DB_USER", ""),
-		DB_PWD:     getEnv("DB_PWD", ""),
-		DB_NAME:    getEnv("DB_NAME", ""),
-		JWT_SECRET: getEnv("JWT_SECRET", ""),
-		MONGO_URI:  getEnv("MONGO_URI", ""),
-		STRIPE_PWD: getEnv("STRIPE_PWD", ""),
+		DB_USER:                getEnv("DB_USER", ""),
+		DB_PWD:                 getEnv("DB_PWD", ""),
+		DB_NAME:                getEnv("DB_NAME", ""),
+		JWT_SECRET:             getEnv("JWT_SECRET", ""),
+		MONGO_URI:              getEnv("MONGO_URI", ""),
+		STRIPE_PWD:             getEnv("STRIPE_PWD", ""),
 		STRIPE_PUBLISHABLE_KEY: getEnv("STRIPE_PUBLISHABLE_KEY", ""),
 	}
 }

@@ -1,12 +1,12 @@
 package util
 
 type Config struct {
-	DB_NAME    string
-	DB_USER    string
-	DB_PWD     string
-	JWT_SECRET string
-	MONGO_URI  string
-	STRIPE_PWD string
+	DB_NAME                string
+	DB_USER                string
+	DB_PWD                 string
+	JWT_SECRET             string
+	MONGO_URI              string
+	STRIPE_PWD             string
 	STRIPE_PUBLISHABLE_KEY string
 }
 

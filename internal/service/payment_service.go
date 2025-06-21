@@ -8,7 +8,7 @@ import (
 )
 
 type PaymentService struct {
-	repo repo.PaymentRepository
+	repo  repo.PaymentRepository
 	store repo.StoreRepository
 }
 
@@ -21,7 +21,7 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 	if err != nil {
 		fmt.Printf("Store found: %v", store)
 		return nil, err
-	}	
+	}
 
 	payment, err := s.repo.Create(m.OwnerId)
 	if err != nil {
@@ -29,4 +29,3 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 	}
 	return payment, nil
 }
-

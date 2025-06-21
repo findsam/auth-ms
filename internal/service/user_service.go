@@ -35,7 +35,7 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 
 	u.Password = pwd
 	u.ToDatabase()
-	
+
 	user, err = s.repo.SignUp(u)
 	if err != nil {
 		return nil, nil, err
