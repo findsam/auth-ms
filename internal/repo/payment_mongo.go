@@ -29,7 +29,7 @@ func NewPaymentRepositoryImpl(db *mongo.Database) *PaymentRepositoryImpl {
 func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	col := u.db.Collection(STORE_DB_NAME)
+	col := u.db.Collection(PAYMENT_DB_NAME)
 
 	bsid, err := bson.ObjectIDFromHex(sid)
 	if err != nil {
@@ -45,6 +45,9 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 	if err != nil { 
 		return nil, err
 	}	
+
+
+	fmt.Println("Inserted ID:", inserted.InsertedID)
 
 	payment.ID = inserted.InsertedID.(bson.ObjectID)
 
