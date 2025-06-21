@@ -13,7 +13,7 @@ import (
 const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
-	Create(sid string) (*model.Payment, error)
+	Create(sid string, amount float64) (*model.Payment, error)
 	GetByStoreId(sid string) ([]*model.Payment, error)
 }
 
@@ -27,7 +27,7 @@ func NewPaymentRepositoryImpl(db *mongo.Database) *PaymentRepositoryImpl {
 	}
 }
 
-func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
+func (u *PaymentRepositoryImpl) Create(sid string, amount float64) (*model.Payment, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	col := u.db.Collection(PAYMENT_DB_NAME)
@@ -39,7 +39,7 @@ func (u *PaymentRepositoryImpl) Create(sid string) (*model.Payment, error) {
 
 	payment := &model.Payment{
 		StoreId: bsid,
-		Amount:  1000,
+		Amount:  amount,
 		Meta:    model.NewMeta(),
 	}
 
