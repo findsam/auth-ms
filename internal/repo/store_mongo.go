@@ -101,7 +101,6 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	return store, nil
 }
 
-
 func (u *StoreRepositoryImpl) GetByStoreId(oid string) (*model.Store, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

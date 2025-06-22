@@ -43,8 +43,6 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 
 	result, err := paymentintent.New(params);
 
-	fmt.Printf("result: %v\n", result)
-	  
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment intent: %w", err)
 	}
@@ -52,6 +50,14 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 	payment, err := s.repo.Create(m.StoreId, tier.Amount, result.ID)
 	if err != nil {
 		return nil, err
+	}
+	return payment, nil
+}
+
+func (s *PaymentService) GetById(id string) (*model.Payment, error) {
+	payment, err := s.repo.GetById(id)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get payment by id: %w", err)
 	}
 	return payment, nil
 }

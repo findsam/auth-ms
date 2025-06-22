@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -14,7 +15,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
 	Create(sid string, amount float64, strid string) (*model.Payment, error)
-	GetByStoreId(sid string) ([]*model.Payment, error)
+	GetById(id string) (*model.Payment, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -53,34 +54,28 @@ func (u *PaymentRepositoryImpl) Create(sid string, amount float64, strid string)
 	return payment, nil
 }
 
-func (u *PaymentRepositoryImpl) GetByStoreId(sid string) ([]*model.Payment, error) {
+func (u *PaymentRepositoryImpl) GetById(oid string) (*model.Payment, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	col := u.db.Collection(PAYMENT_DB_NAME)
 
-	bsid, err := bson.ObjectIDFromHex(sid)
+	boid, err := bson.ObjectIDFromHex(oid)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}
 
-	col := u.db.Collection(PAYMENT_DB_NAME)
-	filter := bson.M{"store_id": bsid}
+	payment := &model.Payment{}
+	err = col.FindOne(
+		ctx,
+		bson.M{"_id": boid},
+	).Decode(payment)
 
-	cursor, err := col.Find(ctx, filter)
 	if err != nil {
-		return nil, fmt.Errorf("failed to find payments: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var payments []*model.Payment
-	if err = cursor.All(ctx, &payments); err != nil {
-		return nil, fmt.Errorf("failed to decode documents: %w", err)
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, fmt.Errorf("payment not found")
+		}
+		return nil, err
 	}
 
-	if err := cursor.Err(); err != nil {
-		return nil, fmt.Errorf("cursor iteration error: %w", err)
-	}
-
-	fmt.Printf("Found %d payments for store ID: %s\n", len(payments), sid)
-
-	return payments, nil
+	return payment, nil
 }

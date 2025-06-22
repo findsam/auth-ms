@@ -72,7 +72,9 @@ func (s *Router) Start() error {
 				// r.Get("/", s.handlers.Payment.GetByStoreId)
 			})
 			r.Route("/payment", func(r chi.Router) {})
-			r.Route("/payment/{id}", func(r chi.Router) {})
+			r.Route("/payment/{id}", func(r chi.Router) {
+				r.Get("/", s.handlers.Payment.GetById)
+			})
 		})
 	})
 
