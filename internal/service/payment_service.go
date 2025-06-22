@@ -34,14 +34,14 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 	tier := (*store.Tiers)[m.Sub]
 
 	params := &stripe.PaymentIntentParams{
-		Amount: stripe.Int64(int64(float64(tier.Amount) * 1.10)),
+		Amount:   stripe.Int64(int64(float64(tier.Amount) * 1.10)),
 		Currency: stripe.String(stripe.CurrencyUSD),
 		AutomaticPaymentMethods: &stripe.PaymentIntentAutomaticPaymentMethodsParams{
-		  Enabled: stripe.Bool(true),
+			Enabled: stripe.Bool(true),
 		},
-	  };
+	}
 
-	result, err := paymentintent.New(params);
+	result, err := paymentintent.New(params)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment intent: %w", err)
@@ -60,11 +60,11 @@ func (s *PaymentService) GetById(id string) (*model.Payment, error) {
 		return nil, fmt.Errorf("failed to get payment by id: %w", err)
 	}
 	stripe.Key = config.Envs.STRIPE_PWD
-	
-	_, err = paymentintent.Get(payment.StripeID, &stripe.PaymentIntentParams{});
+
+	_, err = paymentintent.Get(payment.StripeID, &stripe.PaymentIntentParams{})
 	if err != nil {
 		return nil, fmt.Errorf("intent not found: %w", err)
-	}	
+	}
 
 	return payment, nil
 }

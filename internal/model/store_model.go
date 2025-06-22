@@ -10,8 +10,7 @@ type Store struct {
 }
 
 type Tier struct {
-	Amount      float64    `json:"amount" bson:"amount"`
+	Amount      float64  `json:"amount" bson:"amount"`
 	Description string   `json:"description" bson:"description"`
 	Benefits    []string `json:"benefits" bson:"benefits"`
 }
-

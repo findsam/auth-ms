@@ -5,14 +5,14 @@ import (
 )
 
 type CreatePaymentBody struct {
-	StoreId string  `json:"store_id" validate:"required"`
+	StoreId string `json:"store_id" validate:"required"`
 	Sub     int    `json:"sub" validate:"gte=0,lte=3"`
 }
 
 type Payment struct {
-	ID      bson.ObjectID `bson:"_id,omitempty" json:"id"`
-	StoreId bson.ObjectID `bson:"store_id" json:"store_id" validate:"required"`
-	Amount  float64       `bson:"amount" json:"amount" validate:"required"`
+	ID       bson.ObjectID `bson:"_id,omitempty" json:"id"`
+	StoreId  bson.ObjectID `bson:"store_id" json:"store_id" validate:"required"`
+	Amount   float64       `bson:"amount" json:"amount" validate:"required"`
 	StripeID string        `bson:"stripe_id" json:"stripe_id" validate:"required"`
-	Meta    *Meta         `bson:"meta" json:"meta"`
+	Meta     *Meta         `bson:"meta" json:"meta"`
 }
