@@ -28,7 +28,7 @@ func NewPaymentRepositoryImpl(db *mongo.Database) *PaymentRepositoryImpl {
 	}
 }
 
-func (u *PaymentRepositoryImpl) Create(sid string, amount float64, strid string) (*model.Payment, error) {
+func (u *PaymentRepositoryImpl) Create(sid string, strid string, amount float64) (*model.Payment, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	col := u.db.Collection(PAYMENT_DB_NAME)
