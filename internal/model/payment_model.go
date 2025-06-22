@@ -5,9 +5,9 @@ import (
 )
 
 type CreatePaymentBody struct {
-	StoreId string `json:"store_id" validate:"required"`
-	OwnerId string `json:"owner_id" validate:"required"`
-	Sub     int    `json:"sub" validate:"required"`
+	StoreId string  `json:"store_id" validate:"required"`
+	OwnerId string  `json:"owner_id" validate:"required"`
+	Sub     int    `json:"sub" validate:"gte=0,lte=3"`
 }
 
 type Payment struct {

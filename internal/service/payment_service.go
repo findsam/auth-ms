@@ -19,7 +19,6 @@ func NewPaymentService(repo repo.PaymentRepository, store repo.StoreRepository) 
 func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {
 	store, err := s.store.GetById(m.OwnerId)
 	if err != nil {
-		fmt.Printf("Store found: %v", store)
 		return nil, err
 	}
 	tierLen := len(*store.Tiers)
@@ -27,10 +26,7 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 	if tierLen == 0 {
 		return nil, fmt.Errorf("store has no tiers")
 	}
-	if m.Sub < 0 || m.Sub >= tierLen {
-		return nil, fmt.Errorf("invalid tier")
-	}
-		
+
 	tier := (*store.Tiers)[m.Sub]
 
 	payment, err := s.repo.Create(m.OwnerId, tier.Amount)
