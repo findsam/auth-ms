@@ -40,7 +40,6 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string, amount float64)
 
 	payment := &model.Payment{
 		StoreId:  bsid,
-		Amount:   amount,
 		StripeID: strid,
 		Meta:     model.NewMeta(),
 	}
