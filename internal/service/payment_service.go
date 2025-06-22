@@ -47,7 +47,7 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 		return nil, fmt.Errorf("failed to create payment intent: %w", err)
 	}
 
-	payment, err := s.repo.Create(m.StoreId, tier.Amount, result.ID)
+	payment, err := s.repo.Create(m.StoreId, result.ID, tier.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -59,5 +59,12 @@ func (s *PaymentService) GetById(id string) (*model.Payment, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get payment by id: %w", err)
 	}
+	stripe.Key = config.Envs.STRIPE_PWD
+	
+	_, err = paymentintent.Get(payment.StripeID, &stripe.PaymentIntentParams{});
+	if err != nil {
+		return nil, fmt.Errorf("intent not found: %w", err)
+	}	
+
 	return payment, nil
 }

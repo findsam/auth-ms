@@ -14,7 +14,7 @@ import (
 const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
-	Create(sid string, amount float64, strid string) (*model.Payment, error)
+	Create(sid string, strid string, amount float64) (*model.Payment, error)
 	GetById(id string) (*model.Payment, error)
 }
 
