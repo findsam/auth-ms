@@ -5,6 +5,9 @@ import (
 
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/repo"
+	"github.com/findsam/auth-micro/pkg/config"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/paymentintent"
 )
 
 type PaymentService struct {
@@ -17,7 +20,8 @@ func NewPaymentService(repo repo.PaymentRepository, store repo.StoreRepository) 
 }
 
 func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {
-	store, err := s.store.GetById(m.OwnerId)
+	stripe.Key = config.Envs.STRIPE_PWD
+	store, err := s.store.GetByStoreId(m.StoreId)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +33,23 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 
 	tier := (*store.Tiers)[m.Sub]
 
-	payment, err := s.repo.Create(m.OwnerId, tier.Amount)
+	params := &stripe.PaymentIntentParams{
+		Amount: stripe.Int64(int64(float64(tier.Amount) * 1.10)),
+		Currency: stripe.String(stripe.CurrencyUSD),
+		AutomaticPaymentMethods: &stripe.PaymentIntentAutomaticPaymentMethodsParams{
+		  Enabled: stripe.Bool(true),
+		},
+	  };
+
+	result, err := paymentintent.New(params);
+
+	fmt.Printf("result: %v\n", result)
+	  
+	if err != nil {
+		return nil, fmt.Errorf("failed to create payment intent: %w", err)
+	}
+
+	payment, err := s.repo.Create(m.StoreId, tier.Amount, result.ID)
 	if err != nil {
 		return nil, err
 	}

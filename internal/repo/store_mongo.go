@@ -16,6 +16,7 @@ const STORE_DB_NAME = "store"
 type StoreRepository interface {
 	Create(oid string) (*model.Store, error)
 	GetById(oid string) (*model.Store, error)
+	GetByStoreId(oid string) (*model.Store, error)
 }
 
 type StoreRepositoryImpl struct {
@@ -88,6 +89,33 @@ func (u *StoreRepositoryImpl) GetById(oid string) (*model.Store, error) {
 	err = col.FindOne(
 		ctx,
 		bson.M{"owner_id": boid},
+	).Decode(store)
+
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, fmt.Errorf("store not found")
+		}
+		return nil, err
+	}
+
+	return store, nil
+}
+
+
+func (u *StoreRepositoryImpl) GetByStoreId(oid string) (*model.Store, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	col := u.db.Collection(STORE_DB_NAME)
+
+	boid, err := bson.ObjectIDFromHex(oid)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
+	}
+
+	store := &model.Store{}
+	err = col.FindOne(
+		ctx,
+		bson.M{"_id": boid},
 	).Decode(store)
 
 	if err != nil {
