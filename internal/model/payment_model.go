@@ -15,3 +15,4 @@ type Payment struct {
 	StripeID string        `bson:"stripe_id" json:"stripe_id" validate:"required"`
 	Meta     *Meta         `bson:"meta" json:"meta"`
 }
+

@@ -36,10 +36,13 @@ func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 func (h *PaymentHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	payment, err := h.service.GetById(id)
+	payment, intent, err := h.service.GetById(id)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
-	SendSuccess(w, r, http.StatusOK, payment)
+	SendSuccess(w, r, http.StatusOK, map[string]interface{}{
+		"payment": payment,
+		"intent":  intent,
+	})
 }
