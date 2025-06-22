@@ -31,7 +31,7 @@ func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, err
 		return nil, fmt.Errorf("store has no tiers")
 	}
 
-	tier := (*store.Tiers)[m.Sub]
+	tier := (*store.Tiers)[m.Tier]
 
 	params := &stripe.PaymentIntentParams{
 		Amount:   stripe.Int64(int64(float64(tier.Amount) * 1.10)),
