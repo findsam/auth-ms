@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/findsam/auth-micro/internal/service"
 	"github.com/go-chi/chi/v5"
@@ -31,7 +30,6 @@ func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
 func (h *StoreHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	store, err := h.service.GetById(id)
-	time.Sleep(3 * time.Second)
 
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
