@@ -83,7 +83,6 @@ func (u *UserRepositoryImpl) GetById(id string) (*model.User, error) {
 	).Decode(user)
 
 	if err != nil {
-		fmt.Printf("Error finding user by ID: %v\n", err)
 		return nil, err
 	}
 
@@ -100,7 +99,6 @@ func (u *UserRepositoryImpl) GetByUsername(username string) (*model.User, error)
 		bson.M{"username": username},
 	).Decode(user)
 
-	fmt.Printf("%+v\n", user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, fmt.Errorf("resource not found")

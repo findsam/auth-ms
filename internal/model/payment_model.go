@@ -6,7 +6,7 @@ import (
 
 type CreatePaymentBody struct {
 	StoreId string `json:"store_id" validate:"required"`
-	Tier     int    `json:"tier" validate:"gte=0,lte=3"`
+	Tier    int    `json:"tier" validate:"gte=0,lte=3"`
 }
 
 type Payment struct {
@@ -16,3 +16,8 @@ type Payment struct {
 	Meta     *Meta         `bson:"meta" json:"meta"`
 }
 
+type PaymentAggregateResult struct {
+	Payment *Payment `bson:"payment"`
+	User    *User    `bson:"user"`
+	Store   *Store   `bson:"store"`
+}

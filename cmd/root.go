@@ -23,7 +23,7 @@ func Execute() error {
 	userHandler := handler.NewUserHandler(userService)
 
 	paymentRepo := repo.NewPaymentRepositoryImpl(db)
-	paymentService := service.NewPaymentService(paymentRepo, storeRepo)
+	paymentService := service.NewPaymentService(paymentRepo)
 	paymentHandler := handler.NewPaymentHandler(paymentService)
 
 	deps := &router.Handlers{

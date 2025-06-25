@@ -59,22 +59,13 @@ func (s *Router) Start() error {
 				r.Use(WithJWT)
 				r.Post("/", s.handlers.Store.Create)
 			})
-			r.Route("/store", func(r chi.Router) {
-				r.Get("/{id}", s.handlers.Store.GetById)
+			r.Route("/{username}", func(r chi.Router) {
+				r.Get("/", s.handlers.Store.GetById)
 			})
 		})
 
 		r.Route("/payments", func(r chi.Router) {
-			r.Group(func(r chi.Router) {
-				r.Post("/", s.handlers.Payment.Create)
-			})
-			r.Route("/{id}", func(r chi.Router) {
-				// r.Get("/", s.handlers.Payment.GetByStoreId)
-			})
-			r.Route("/payment", func(r chi.Router) {})
-			r.Route("/payment/{id}", func(r chi.Router) {
-				r.Get("/", s.handlers.Payment.GetById)
-			})
+			r.Get("/{id}", s.handlers.Payment.GetById)
 		})
 	})
 

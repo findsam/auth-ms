@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/model"
@@ -96,7 +95,6 @@ func (h *UserHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	user, err := h.service.GetByUsername(username)
 	if err != nil {
-		fmt.Println(err)
 		SendError(w, r, http.StatusNotFound, err)
 		return
 	}
