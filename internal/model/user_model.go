@@ -28,7 +28,6 @@ type User struct {
 
 func (u *User) ToPublic() *UserPublic {
 	return &UserPublic{
-		ID:       u.ID.Hex(),
 		Username: u.Username,
 	}
 }
@@ -44,6 +43,6 @@ type UserSignInRequest struct {
 }
 
 type UserPublic struct {
-	ID       string `bson:"_id,omitempty" json:"id"`
-	Username string `bson:"username" json:"username"`
+	Id       bson.ObjectID `bson:"_id,omitempty" json:"id"`
+	Username string        `bson:"username" json:"username"`
 }

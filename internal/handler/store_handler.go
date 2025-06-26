@@ -28,7 +28,7 @@ func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *StoreHandler) GetById(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "username")
+	id := chi.URLParam(r, "ownerId")
 	store, err := h.service.GetById(id)
 
 	if err != nil {

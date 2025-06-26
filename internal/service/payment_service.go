@@ -1,26 +1,44 @@
 package service
 
 import (
+	"fmt"
+
+	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/repo"
+	"github.com/findsam/auth-micro/pkg/config"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/paymentintent"
 )
 
 type PaymentService struct {
-	repo  repo.PaymentRepository
+	repo repo.PaymentRepository
 }
 
 func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
 	return &PaymentService{repo: repo}
 }
 
-
-func (s *PaymentService) GetById(id string) (interface{}, error) {
-	payment, err := s.repo.GetById(id)
+func (s *PaymentService) GetById(sid string, pid string) (*model.PaymentAggregateResult, error) {
+	result, err := s.repo.GetById(sid)
 	if err != nil {
 		return nil, err
 	}
-	return payment, nil
-}
+	fmt.Println(result.User.Id, result.Store.OwnerId)
+	
+	if result.User.Id != result.Store.OwnerId {
+		return nil, fmt.Errorf("user %s is not the owner of store %s", result.User.Username, result.Store.ID)
+	}
 
+	stripe.Key = config.Envs.STRIPE_PWD
+	_, err = paymentintent.Get(result.Payment.StripeID, &stripe.PaymentIntentParams{})
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get payment intent: %w", err)
+	}	
+
+	// fmt.Printf("%+v\n", body)
+	return result, nil
+}
 
 // func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {
 // 	stripe.Key = config.Envs.STRIPE_PWD

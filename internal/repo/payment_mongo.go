@@ -52,7 +52,6 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 	return payment, nil
 }
 
-
 func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResult, error) {
 	objID, err := bson.ObjectIDFromHex(id)
 	if err != nil {
@@ -81,20 +80,20 @@ func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResul
 		}}},
 	}
 
-    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-    defer cancel()
-    col := u.db.Collection(PAYMENT_DB_NAME)
-    cursor, err := col.Aggregate(ctx, pipeline)
-    if err != nil {
-        return nil, fmt.Errorf("failed to aggregate payments: %w", err)
-    }
-    defer cursor.Close(ctx)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	col := u.db.Collection(PAYMENT_DB_NAME)
+	cursor, err := col.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, fmt.Errorf("failed to aggregate payments: %w", err)
+	}
+	defer cursor.Close(ctx)
 	var result model.PaymentAggregateResult
 	if cursor.Next(ctx) {
 		if err := cursor.Decode(&result); err != nil {
 			return nil, fmt.Errorf("failed to decode payment: %w", err)
 		}
 	}
-    fmt.Printf("Aggregate result: %+v\n", result)
-    return &result, nil
+	// fmt.Printf("Aggregate result: %+v\n", result)
+	return &result, nil
 }
