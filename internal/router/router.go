@@ -42,9 +42,8 @@ func (s *Router) Start() error {
 		r.Route("/users", func(r chi.Router) {
 			r.Post("/sign-up", s.handlers.User.SignUp)
 			r.Post("/sign-in", s.handlers.User.SignIn)
-			r.Route("/user", func(r chi.Router) {
-				r.Get("/{username}", s.handlers.User.GetByUsername)
-			})
+			r.Get("/{username}", s.handlers.User.GetByUsername)
+			
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Get("/me", s.handlers.User.Me)
@@ -59,9 +58,7 @@ func (s *Router) Start() error {
 			})
 			r.Route("/{ownerId}", func(r chi.Router) {
 				r.Get("/", s.handlers.Store.GetById)
-			})
-			r.Route("/{storeId}", func(r chi.Router) {
-				r.Get("/{paymentId}", s.handlers.Payment.GetById)
+				r.Get("/payment/{paymentId}", s.handlers.Payment.GetById)
 			})
 		})
 	})

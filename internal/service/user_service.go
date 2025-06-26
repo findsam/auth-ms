@@ -41,7 +41,7 @@ func (s *UserService) SignUp(u *model.User) (*model.UserPublic, *util.TokenPair,
 		return nil, nil, err
 	}
 
-	tokens, err := token.GenerateTokens(user.ID.Hex())
+	tokens, err := token.GenerateTokens(user.Id.Hex())
 	if err != nil {
 		return nil, nil, err
 	}
@@ -62,7 +62,7 @@ func (s *UserService) SignIn(u *model.UserSignInRequest) (*model.UserPublic, *ut
 		return nil, nil, fmt.Errorf("invalid credentials")
 	}
 
-	tokens, err := token.GenerateTokens(user.ID.Hex())
+	tokens, err := token.GenerateTokens(user.Id.Hex())
 	if err != nil {
 		return nil, nil, err
 	}
@@ -85,8 +85,8 @@ func (s *UserService) GetById(id string) (*model.UserPublic, error) {
 	return user.ToPublic(), nil
 }
 
-func (s *UserService) GetByUsername(id string) (*model.UserPublic, error) {
-	user, err := s.repo.GetByUsername(id)
+func (s *UserService) GetByUsername(username string) (*model.UserPublic, error) {
+	user, err := s.repo.GetByUsername(username)
 	if err != nil {
 		return nil, err
 	}

@@ -40,7 +40,7 @@ func (u *UserRepositoryImpl) SignUp(user *model.User) (*model.User, error) {
 		return nil, err
 	}
 
-	user.ID = inserted.InsertedID.(bson.ObjectID)
+	user.Id = inserted.InsertedID.(bson.ObjectID)
 	return user, nil
 }
 
