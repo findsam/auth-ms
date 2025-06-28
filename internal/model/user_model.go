@@ -17,7 +17,7 @@ type UserDetails struct {
 }
 
 type User struct {
-	Id     bson.ObjectID `bson:"_id,omitempty" json:"id"`
+	Id       bson.ObjectID `bson:"_id,omitempty" json:"id"`
 	Email    string        `bson:"email" json:"email" validate:"required,email"`
 	Password string        `bson:"password" json:"password" validate:"required,min=6,containsany=!@#$%^&*"`
 	Username string        `bson:"username" json:"username" validate:"required,min=3,max=18,alphanum"`
@@ -28,7 +28,7 @@ type User struct {
 
 func (u *User) ToPublic() *UserPublic {
 	return &UserPublic{
-		Id: u.Id,
+		Id:       u.Id,
 		Username: u.Username,
 	}
 }

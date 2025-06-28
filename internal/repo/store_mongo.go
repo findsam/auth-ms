@@ -159,7 +159,7 @@ func (u *StoreRepositoryImpl) GetByUsername(username string) (*model.UserStoreRe
 		return nil, fmt.Errorf("failed to aggregate payments: %w", err)
 	}
 	defer cursor.Close(ctx)
-	
+
 	var result model.UserStoreResult
 	if cursor.Next(ctx) {
 		if err := cursor.Decode(&result); err != nil {
@@ -169,4 +169,3 @@ func (u *StoreRepositoryImpl) GetByUsername(username string) (*model.UserStoreRe
 
 	return &result, nil
 }
-

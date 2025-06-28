@@ -43,7 +43,7 @@ func (s *Router) Start() error {
 			r.Post("/sign-up", s.handlers.User.SignUp)
 			r.Post("/sign-in", s.handlers.User.SignIn)
 			r.Get("/{username}", s.handlers.User.GetByUsername)
-			
+
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Get("/me", s.handlers.User.Me)

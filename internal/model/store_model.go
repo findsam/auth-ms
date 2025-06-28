@@ -16,10 +16,10 @@ type Tier struct {
 }
 
 type StorePublic struct {
-	Tiers   *[]Tier       `json:"tiers" bson:"tiers"`
+	Tiers *[]Tier `json:"tiers" bson:"tiers"`
 }
 
 type UserStoreResult struct {
-	User  User  `json:"user" bson:"user"`
+	User  User        `json:"user" bson:"user"`
 	Store StorePublic `json:"store" bson:"store"`
 }

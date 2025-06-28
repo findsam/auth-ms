@@ -25,5 +25,5 @@ func (h *PaymentHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
-	SendSuccess(w, r, http.StatusOK, result) 
+	SendSuccess(w, r, http.StatusOK, result)
 }
