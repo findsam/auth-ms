@@ -14,7 +14,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
 	Create(sid string, strid string) (*model.Payment, error)
-	GetById(username string, id string) (*model.PaymentAggregateResult, error)
+	GetById(id string) (*model.PaymentAggregateResult, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -52,7 +52,7 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 	return payment, nil
 }
 
-func (u *PaymentRepositoryImpl) GetById(username string, id string) (*model.PaymentAggregateResult, error) {
+func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResult, error) {
 	pid, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
