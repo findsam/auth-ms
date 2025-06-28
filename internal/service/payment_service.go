@@ -23,7 +23,7 @@ func (s *PaymentService) GetById(username string, id string) (*model.PaymentAggr
 	if result.User.Username != username {
 		return nil, fmt.Errorf("user %s does not own payment %s", username, id)
 	}
-	return nil, nil
+	return result, nil
 }
 
 // func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {

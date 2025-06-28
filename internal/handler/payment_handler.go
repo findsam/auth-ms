@@ -22,10 +22,10 @@ func (h *PaymentHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	paymentId := chi.URLParam(r, "paymentId")
 	fmt.Println(username, paymentId)
-	_, err := h.service.GetById(username, paymentId)
+	result, err := h.service.GetById(username, paymentId)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return
 	}
-	SendSuccess(w, r, http.StatusOK, "Payment details would be here") 
+	SendSuccess(w, r, http.StatusOK, result) 
 }
