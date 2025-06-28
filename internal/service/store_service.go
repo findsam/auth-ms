@@ -33,9 +33,7 @@ func (s *StoreService) Create(oid string) (*model.Store, error) {
 }
 
 func (s *StoreService) GetByUsername(username string) (*model.UserStoreResult, error) {
-	fmt.Println("Username",username)
 	store, err := s.repo.GetByUsername(username)
-
 	if err != nil {
 		return nil, err
 	}

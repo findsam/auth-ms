@@ -17,9 +17,9 @@ func NewPaymentHandler(service *service.PaymentService) *PaymentHandler {
 	}
 }
 func (h *PaymentHandler) GetById(w http.ResponseWriter, r *http.Request) {
-	pid := chi.URLParam(r, "paymentId")
-	sid := chi.URLParam(r, "storeId")
-	payment, err := h.service.GetById(sid, pid)
+	username := chi.URLParam(r, "username")
+	paymentId := chi.URLParam(r, "paymentId")
+	payment, err := h.service.GetById(username, paymentId)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
 		return

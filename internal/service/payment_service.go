@@ -37,7 +37,6 @@ func (s *PaymentService) GetById(sid string, pid string) (*model.PaymentAggregat
 		return nil, fmt.Errorf("failed to get payment intent: %w", err)
 	}	
 
-	// fmt.Printf("%+v\n", body)
 	return result, nil
 }
 
