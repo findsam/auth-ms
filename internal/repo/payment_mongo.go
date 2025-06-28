@@ -14,7 +14,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
 	Create(sid string, strid string) (*model.Payment, error)
-	GetById(username string, id string) (*model.Payment, error)
+	GetById(username string, id string) (*model.PaymentAggregateResult, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -52,7 +52,7 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 	return payment, nil
 }
 
-func (u *PaymentRepositoryImpl) GetById(username string, id string) (*model.Payment, error) {
+func (u *PaymentRepositoryImpl) GetById(username string, id string) (*model.PaymentAggregateResult, error) {
 	pid, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
@@ -60,24 +60,39 @@ func (u *PaymentRepositoryImpl) GetById(username string, id string) (*model.Paym
 
 	pipeline := mongo.Pipeline{
 		{{Key: "$match", Value: bson.D{{Key: "_id", Value: pid}}}},
+		{{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "store"},
+			{Key: "localField", Value: "store_id"},
+			{Key: "foreignField", Value: "_id"},
+			{Key: "as", Value: "store"},
+		}}},
+		{{Key: "$unwind", Value: "$store"}},
+		{{Key: "$project", Value: bson.D{
+			{Key: "payment", Value: "$$ROOT"},
+			{Key: "store", Value: "$store"},
+		}}},
 	}
 	
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	col := u.db.Collection(PAYMENT_DB_NAME)
+
 	cursor, err := col.Aggregate(ctx, pipeline)
 	if err != nil {
 		return nil, fmt.Errorf("failed to aggregate payments: %w", err)
 	}
 	defer cursor.Close(ctx)
 	
-	var result model.Payment
+	var result model.PaymentAggregateResult
 	if cursor.Next(ctx) {
 		if err := cursor.Decode(&result); err != nil {
 			return nil, fmt.Errorf("failed to decode result: %w", err)
 		}
 	}
-	fmt.Printf("Payment result: %+v\n", result)
+	fmt.Printf("PaymentAggregateResult: %+v\n", &result)
+	fmt.Printf("PaymentAggregateResult.Payment: %+v\n", result.Payment)
+	fmt.Printf("PaymentAggregateResult.Store: %+v\n", result.Store)
 
 	return &result, nil
 }
