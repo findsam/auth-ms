@@ -19,5 +19,4 @@ type Payment struct {
 type PaymentResponse struct {
 	Payment *Payment    `json:"payment" bson:"payment"`
 	User    *UserPublic `json:"user" bson:"user"`
-	Store   *StorePublic      `json:"store" bson:"store"`
 }

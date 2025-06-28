@@ -5,6 +5,9 @@ import (
 
 	"github.com/findsam/auth-micro/internal/model"
 	"github.com/findsam/auth-micro/internal/repo"
+	"github.com/findsam/auth-micro/pkg/config"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/paymentintent"
 )
 
 type PaymentService struct {
@@ -22,7 +25,10 @@ func (s *PaymentService) GetById(username string, id string) (*model.PaymentResp
 	}
 	if result.User.Username != username {
 		return nil, fmt.Errorf("user %s does not own payment %s", username, id)
-	}
+	}	
+	stripe.Key = config.Envs.STRIPE_PWD
+	_, err = paymentintent.Get(result.Payment.StripeId, &stripe.PaymentIntentParams{})
+
 	return result, nil
 }
 
