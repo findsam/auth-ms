@@ -67,9 +67,17 @@ func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResul
 			{Key: "as", Value: "store"},
 		}}},
 		{{Key: "$unwind", Value: "$store"}},
+		{{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "users"},
+			{Key: "localField", Value: "store.owner_id"},
+			{Key: "foreignField", Value: "_id"},
+			{Key: "as", Value: "user"},
+		}}},
+		{{Key: "$unwind", Value: "$user"}},
 		{{Key: "$project", Value: bson.D{
 			{Key: "payment", Value: "$$ROOT"},
 			{Key: "store", Value: "$store"},
+			{Key: "user", Value: "$user"},
 		}}},
 	}
 	
@@ -90,9 +98,9 @@ func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResul
 			return nil, fmt.Errorf("failed to decode result: %w", err)
 		}
 	}
-	fmt.Printf("PaymentAggregateResult: %+v\n", &result)
-	fmt.Printf("PaymentAggregateResult.Payment: %+v\n", result.Payment)
-	fmt.Printf("PaymentAggregateResult.Store: %+v\n", result.Store)
+
+	fmt.Printf("Payment Aggregate Result: %+v\n", result)
+	fmt.Printf("Payment Aggregate Result User: %+v\n", result.User)
 
 	return &result, nil
 }

@@ -16,30 +16,14 @@ func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
 }
 
 func (s *PaymentService) GetById(username string, id string) (*model.PaymentAggregateResult, error) {
-	_, err := s.repo.GetById(username, id)
+	result, err := s.repo.GetById(id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get payment by id: %w", err)
 	}
+	if result.User.Username != username {
+		return nil, fmt.Errorf("user %s does not own payment %s", username, id)
+	}
 	return nil, nil
-	// result, err := s.repo.GetById(pid)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// fmt.Printf("result: %+v\n", result)
-	
-	// if result.User.Username != sid{
-	// 	return nil, fmt.Errorf("user %s is not the owner of store %s", result.User.Username, result.Store.ID)
-	// }
-
-	// stripe.Key = config.Envs.STRIPE_PWD
-	// _, err = paymentintent.Get(result.Payment.StripeID, &stripe.PaymentIntentParams{})
-
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to get payment intent: %w", err)
-	// }	
-
-	// return result, nil
 }
 
 // func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {

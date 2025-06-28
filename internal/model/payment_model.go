@@ -18,6 +18,6 @@ type Payment struct {
 
 type PaymentAggregateResult struct {
 	Payment *Payment    `json:"payment" bson:"payment"`
-	// User    *UserPublic `json:"user" bson:"user"`
+	User    *UserPublic `json:"user" bson:"user"`
 	Store   *Store      `json:"store" bson:"store"`
 }
