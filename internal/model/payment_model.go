@@ -16,8 +16,8 @@ type Payment struct {
 	Meta     *Meta         `bson:"meta" json:"meta"`
 }
 
-type PaymentAggregateResult struct {
+type PaymentResponse struct {
 	Payment *Payment    `json:"payment" bson:"payment"`
 	User    *UserPublic `json:"user" bson:"user"`
-	Store   *Store      `json:"store" bson:"store"`
+	Store   *StorePublic      `json:"store" bson:"store"`
 }

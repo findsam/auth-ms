@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/findsam/auth-micro/internal/service"
@@ -21,7 +20,6 @@ func NewPaymentHandler(service *service.PaymentService) *PaymentHandler {
 func (h *PaymentHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	username := chi.URLParam(r, "username")
 	paymentId := chi.URLParam(r, "paymentId")
-	fmt.Println(username, paymentId)
 	result, err := h.service.GetById(username, paymentId)
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)

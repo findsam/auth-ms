@@ -15,7 +15,11 @@ type Tier struct {
 	Benefits    []string `json:"benefits" bson:"benefits"`
 }
 
+type StorePublic struct {
+	Tiers   *[]Tier       `json:"tiers" bson:"tiers"`
+}
+
 type UserStoreResult struct {
 	User  User  `json:"user" bson:"user"`
-	Store Store `json:"store" bson:"store"`
+	Store StorePublic `json:"store" bson:"store"`
 }

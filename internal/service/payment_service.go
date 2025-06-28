@@ -15,7 +15,7 @@ func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
 	return &PaymentService{repo: repo}
 }
 
-func (s *PaymentService) GetById(username string, id string) (*model.PaymentAggregateResult, error) {
+func (s *PaymentService) GetById(username string, id string) (*model.PaymentResponse, error) {
 	result, err := s.repo.GetById(id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get payment by id: %w", err)

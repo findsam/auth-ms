@@ -14,7 +14,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
 	Create(sid string, strid string) (*model.Payment, error)
-	GetById(id string) (*model.PaymentAggregateResult, error)
+	GetById(id string) (*model.PaymentResponse, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -52,7 +52,7 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 	return payment, nil
 }
 
-func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResult, error) {
+func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentResponse, error) {
 	pid, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
@@ -80,7 +80,6 @@ func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResul
 			{Key: "user", Value: "$user"},
 		}}},
 	}
-	
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -92,15 +91,12 @@ func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResul
 	}
 	defer cursor.Close(ctx)
 	
-	var result model.PaymentAggregateResult
+	var result model.PaymentResponse
 	if cursor.Next(ctx) {
 		if err := cursor.Decode(&result); err != nil {
 			return nil, fmt.Errorf("failed to decode result: %w", err)
 		}
 	}
-
-	fmt.Printf("Payment Aggregate Result: %+v\n", result)
-	fmt.Printf("Payment Aggregate Result User: %+v\n", result.User)
 
 	return &result, nil
 }
