@@ -56,10 +56,11 @@ func (s *Router) Start() error {
 				r.Use(WithJWT)
 				r.Post("/", s.handlers.Store.Create)
 			})
-			r.Route("/{ownerId}", func(r chi.Router) {
-				r.Get("/", s.handlers.Store.GetById)
-				r.Get("/payment/{paymentId}", s.handlers.Payment.GetById)
+			r.Route("/{username}", func(r chi.Router) {
+				r.Get("/", s.handlers.Store.GetByUsername)
+				r.Get("/payments/{paymentId}", s.handlers.Payment.GetById)
 			})
+			
 		})
 	})
 

@@ -19,13 +19,14 @@ func NewPaymentService(repo repo.PaymentRepository) *PaymentService {
 }
 
 func (s *PaymentService) GetById(sid string, pid string) (*model.PaymentAggregateResult, error) {
-	result, err := s.repo.GetById(sid)
+	result, err := s.repo.GetById(pid)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(result.User.Id, result.Store.OwnerId)
+
+	fmt.Printf("result: %+v\n", result)
 	
-	if result.User.Id != result.Store.OwnerId {
+	if result.User.Username != sid{
 		return nil, fmt.Errorf("user %s is not the owner of store %s", result.User.Username, result.Store.ID)
 	}
 

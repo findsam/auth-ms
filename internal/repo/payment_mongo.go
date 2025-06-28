@@ -54,6 +54,8 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 
 func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResult, error) {
 	objID, err := bson.ObjectIDFromHex(id)
+
+	fmt.Println("GetById called with id:", objID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
 	}

@@ -27,9 +27,9 @@ func (h *StoreHandler) Create(w http.ResponseWriter, r *http.Request) {
 	SendSuccess(w, r, http.StatusCreated, store)
 }
 
-func (h *StoreHandler) GetById(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "ownerId")
-	store, err := h.service.GetById(id)
+func (h *StoreHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "username")
+	store, err := h.service.GetByUsername(id)
 
 	if err != nil {
 		SendError(w, r, http.StatusInternalServerError, err)
