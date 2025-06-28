@@ -60,7 +60,6 @@ func (s *Router) Start() error {
 				r.Get("/", s.handlers.Store.GetByUsername)
 				r.Get("/payments/{paymentId}", s.handlers.Payment.GetById)
 			})
-			
 		})
 	})
 

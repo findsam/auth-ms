@@ -14,7 +14,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
 	Create(sid string, strid string) (*model.Payment, error)
-	GetById(id string) (*model.PaymentAggregateResult, error)
+	GetById(username string, id string) (*model.Payment, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -39,7 +39,7 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 
 	payment := &model.Payment{
 		StoreId:  bsid,
-		StripeID: strid,
+		StripeId: strid,
 		Meta:     model.NewMeta(),
 	}
 
@@ -52,4 +52,79 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 	return payment, nil
 }
 
-func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentAggregateResult, error) {}
+func (u *PaymentRepositoryImpl) GetById(username string, id string) (*model.Payment, error) {
+	pid, err := bson.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
+	}	
+
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.D{{Key: "_id", Value: pid}}}},
+	}
+	
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	col := u.db.Collection(PAYMENT_DB_NAME)
+	cursor, err := col.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, fmt.Errorf("failed to aggregate payments: %w", err)
+	}
+	defer cursor.Close(ctx)
+	
+	var result model.Payment
+	if cursor.Next(ctx) {
+		if err := cursor.Decode(&result); err != nil {
+			return nil, fmt.Errorf("failed to decode result: %w", err)
+		}
+	}
+	fmt.Printf("Payment result: %+v\n", result)
+
+	return &result, nil
+}
+
+
+
+
+
+// func (u *StoreRepositoryImpl) GetByUsername(username string) (*model.UserStoreResult, error) {
+	// pipeline := mongo.Pipeline{
+	// 	{{Key: "$lookup", Value: bson.D{
+	// 		{Key: "from", Value: "users"},
+	// 		{Key: "pipeline", Value: bson.A{
+	// 			bson.D{{Key: "$match", Value: bson.D{{Key: "username", Value: username}}}},
+	// 		}},
+	// 		{Key: "as", Value: "user"},
+	// 	}}},
+	// 	{{Key: "$unwind", Value: "$user"}},
+	// 	{{Key: "$lookup", Value: bson.D{
+	// 		{Key: "from", Value: "store"},
+	// 		{Key: "localField", Value: "user._id"},
+	// 		{Key: "foreignField", Value: "owner_id"},
+	// 		{Key: "as", Value: "store"},
+	// 	}}},
+	// 	{{Key: "$unwind", Value: "$store"}},
+	// 	{{Key: "$project", Value: bson.D{
+	// 		{Key: "store", Value: "$store"},
+	// 		{Key: "user", Value: "$user"},
+	// 	}}},
+	// }
+
+	// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// defer cancel()
+	// col := u.db.Collection(PAYMENT_DB_NAME)
+	// cursor, err := col.Aggregate(ctx, pipeline)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to aggregate payments: %w", err)
+	// }
+	// defer cursor.Close(ctx)
+	
+	// var result model.UserStoreResult
+	// if cursor.Next(ctx) {
+	// 	if err := cursor.Decode(&result); err != nil {
+	// 		return nil, fmt.Errorf("failed to decode result: %w", err)
+	// 	}
+	// }
+
+// 	return &result, nil
+// }
+

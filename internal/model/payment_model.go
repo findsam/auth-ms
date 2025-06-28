@@ -12,7 +12,7 @@ type CreatePaymentBody struct {
 type Payment struct {
 	ID       bson.ObjectID `bson:"_id,omitempty" json:"id"`
 	StoreId  bson.ObjectID `bson:"store_id" json:"store_id" validate:"required"`
-	StripeID string        `bson:"stripe_id" json:"stripe_id" validate:"required"`
+	StripeId string        `bson:"stripe_id" json:"stripe_id" validate:"required"`
 	Meta     *Meta         `bson:"meta" json:"meta"`
 }
 
