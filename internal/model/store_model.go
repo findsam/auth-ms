@@ -20,6 +20,6 @@ type StorePublic struct {
 }
 
 type UserStoreResult struct {
-	User  User        `json:"user" bson:"user"`
-	Store StorePublic `json:"store" bson:"store"`
+	User  UserPublic     `json:"user" bson:"user"`
+	Store StorePublic 	`json:"store" bson:"store"`
 }
