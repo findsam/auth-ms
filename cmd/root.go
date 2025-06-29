@@ -14,17 +14,18 @@ func Execute() error {
 		return err
 	}
 
-	storeRepo := repo.NewStoreRepositoryImpl(db)
-	storeService := service.NewStoreService(storeRepo)
-	storeHandler := handler.NewStoreHandler(storeService)
-
 	userRepo := repo.NewUserRepositoryImpl(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
-
+	
+	storeRepo := repo.NewStoreRepositoryImpl(db)
+	storeService := service.NewStoreService(storeRepo)
+	storeHandler := handler.NewStoreHandler(storeService)
+	
 	paymentRepo := repo.NewPaymentRepositoryImpl(db)
-	paymentService := service.NewPaymentService(paymentRepo)
+	paymentService := service.NewPaymentService(paymentRepo, storeRepo, userRepo)
 	paymentHandler := handler.NewPaymentHandler(paymentService)
+
 
 	deps := &router.Handlers{
 		Store:   storeHandler,

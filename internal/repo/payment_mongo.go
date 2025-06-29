@@ -14,7 +14,7 @@ const PAYMENT_DB_NAME = "payment"
 
 type PaymentRepository interface {
 	Create(sid string, strid string) (*model.Payment, error)
-	GetById(id string) (*model.PaymentResponse, error)
+	GetById(id string) (*model.Payment, error)
 }
 
 type PaymentRepositoryImpl struct {
@@ -51,54 +51,25 @@ func (u *PaymentRepositoryImpl) Create(sid string, strid string) (*model.Payment
 	payment.ID = inserted.InsertedID.(bson.ObjectID)
 	return payment, nil
 }
-
-func (u *PaymentRepositoryImpl) GetById(id string) (*model.PaymentResponse, error) {
+func (u *PaymentRepositoryImpl) GetById(id string) (*model.Payment, error) {
 	pid, err := bson.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid ObjectID format: %v", err)
-	}
-
-	pipeline := mongo.Pipeline{
-		{{Key: "$match", Value: bson.D{{Key: "_id", Value: pid}}}},
-		{{Key: "$lookup", Value: bson.D{
-			{Key: "from", Value: "store"},
-			{Key: "localField", Value: "store_id"},
-			{Key: "foreignField", Value: "_id"},
-			{Key: "as", Value: "store"},
-		}}},
-		{{Key: "$unwind", Value: "$store"}},
-		{{Key: "$lookup", Value: bson.D{
-			{Key: "from", Value: "users"},
-			{Key: "localField", Value: "store.owner_id"},
-			{Key: "foreignField", Value: "_id"},
-			{Key: "as", Value: "user"},
-		}}},
-		{{Key: "$unwind", Value: "$user"}},
-		{{Key: "$project", Value: bson.D{
-			{Key: "payment", Value: "$$ROOT"},
-			{Key: "store", Value: "$store"},
-			{Key: "user", Value: "$user"},
-		}}},
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	col := u.db.Collection(PAYMENT_DB_NAME)
 
-	cursor, err := col.Aggregate(ctx, pipeline)
+	var payment model.Payment
+	err = col.FindOne(ctx, bson.M{"_id": pid}).Decode(&payment)
 	if err != nil {
-		return nil, fmt.Errorf("failed to aggregate payments: %w", err)
-	}
-	defer cursor.Close(ctx)
-
-	var result model.PaymentResponse
-	if cursor.Next(ctx) {
-		if err := cursor.Decode(&result); err != nil {
-			return nil, fmt.Errorf("failed to decode result: %w", err)
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
 		}
+		return nil, fmt.Errorf("failed to find payment: %w", err)
 	}
-
-	return &result, nil
+	return &payment, nil
 }
 
 // func (u *StoreRepositoryImpl) GetByUsername(username string) (*model.UserStoreResult, error) {

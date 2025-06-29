@@ -15,8 +15,3 @@ type Payment struct {
 	StripeId string        `bson:"stripe_id" json:"stripe_id" validate:"required"`
 	Meta     *Meta         `bson:"meta" json:"meta"`
 }
-
-type PaymentResponse struct {
-	Payment *Payment    `json:"payment" bson:"payment"`
-	User    *UserPublic `json:"user" bson:"user"`
-}
