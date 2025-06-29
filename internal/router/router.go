@@ -39,11 +39,10 @@ func (s *Router) Start() error {
 	}))
 
 	c.Route("/api/v1", func(r chi.Router) {
-		r.Route("/users", func(r chi.Router) {
+		r.Route("/user", func(r chi.Router) {
 			r.Post("/sign-up", s.handlers.User.SignUp)
 			r.Post("/sign-in", s.handlers.User.SignIn)
 			r.Get("/{username}", s.handlers.User.GetByUsername)
-
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Get("/me", s.handlers.User.Me)
@@ -51,14 +50,14 @@ func (s *Router) Start() error {
 			})
 		})
 
-		r.Route("/stores", func(r chi.Router) {
+		r.Route("/store", func(r chi.Router) {
 			r.Group(func(r chi.Router) {
 				r.Use(WithJWT)
 				r.Post("/", s.handlers.Store.Create)
 			})
 			r.Route("/{username}", func(r chi.Router) {
 				r.Get("/", s.handlers.Store.GetByUsername)
-				r.Get("/payments/{paymentId}", s.handlers.Payment.GetById)
+				r.Get("/payment/{paymentId}", s.handlers.Payment.GetById)
 			})
 		})
 	})
