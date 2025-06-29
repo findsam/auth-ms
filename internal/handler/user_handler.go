@@ -37,7 +37,7 @@ func (h *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteStrictMode,
 		HttpOnly: true,
 		Secure:   true,
-		Path:     "/api/v1/users/refresh",
+		Path:     "/api/v1/user/refresh",
 		MaxAge:   7 * 24 * 60 * 60,
 	})
 
@@ -67,7 +67,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteStrictMode,
 		HttpOnly: true,
 		Secure:   true,
-		Path:     "/api/v1/users/refresh",
+		Path:     "/api/v1/user/refresh",
 		MaxAge:   7 * 24 * 60 * 60,
 	})
 
@@ -131,7 +131,7 @@ func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteStrictMode,
 		HttpOnly: true,
 		Secure:   true,
-		Path:     "/api/v1/users/refresh",
+		Path:     "/api/v1/user/refresh",
 		MaxAge:   7 * 24 * 60 * 60,
 	})
 

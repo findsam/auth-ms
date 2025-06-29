@@ -26,7 +26,7 @@ func WithJWT(next http.Handler) http.Handler {
 		t, err := token.ValidateJWT(accessToken)
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
-				if r.URL.Path == "/api/v1/users/refresh" {
+				if r.URL.Path == "/api/v1/user/refresh" {
 					refreshCookie, cookieErr := r.Cookie("refresh_token")
 					if cookieErr != nil || refreshCookie.Value == "" {
 						handler.SendError(w, r, http.StatusUnauthorized, fmt.Errorf("refresh token required"))
