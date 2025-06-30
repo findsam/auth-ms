@@ -57,6 +57,7 @@ func (s *Router) Start() error {
 			})
 			r.Route("/{username}", func(r chi.Router) {
 				r.Get("/", s.handlers.Store.GetByUsername)
+				r.Get("/payment", s.handlers.Payment.Create)
 				r.Get("/payment/{paymentId}", s.handlers.Payment.GetById)
 			})
 		})

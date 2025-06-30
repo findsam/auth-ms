@@ -27,3 +27,12 @@ func (h *PaymentHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	}
 	SendSuccess(w, r, http.StatusOK, result)
 }
+
+func (h *PaymentHandler) Create(w http.ResponseWriter, r *http.Request) {
+	username := chi.URLParam(r, "username")
+	// result, err := h.service.Create(username)
+	SendSuccess(w, r, http.StatusOK, map[string]string{
+		"message": "Payment creation is not implemented yet",
+		"username": username,
+	})
+}

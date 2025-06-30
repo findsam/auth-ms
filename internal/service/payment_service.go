@@ -54,25 +54,17 @@ func (s *PaymentService) GetById(username string, id string) (any, error) {
 	}, nil
 }
 
-// func (s *PaymentService) GetById(username string, id string) (any, error) {
-// 	result, err := s.repo.GetById(id)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to get payment by id: %w", err)
-// 	}
-// 	if result.User.Username != username {
-// 		return nil, fmt.Errorf("user %s does not own payment %s", username, id)
-// 	}
-// 	stripe.Key = config.Envs.STRIPE_PWD
-// 	resi, err := paymentintent.Get(result.Payment.StripeId, &stripe.PaymentIntentParams{})
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to get payment intent: %w", err)
-// 	}
-// 	fmt.Printf("%v\n", resi)
-// 	return map[string]interface{}{
-// 		"payment": result,
-// 		"intent":  resi,
-// 	}, nil
-// }
+func (s *PaymentService) Create(username string) (any, error) {
+	result, err := s.store.GetByUsername(username)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get store by username: %w", err)
+	}
+
+	if len(*result.Store.Tiers) == 0 {
+		return nil, fmt.Errorf("store has no tiers")
+	}
+	return nil, nil
+}
 
 // func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {
 // 	stripe.Key = config.Envs.STRIPE_PWD
@@ -109,30 +101,3 @@ func (s *PaymentService) GetById(username string, id string) (any, error) {
 // 	return payment, nil
 // }
 
-// func (s *PaymentService) GetById(username string, id string) (*model.Payment, *stripe.PaymentIntent, error) {
-// 	user, err := s.user.GetByUsername(username)
-// 	if err != nil {
-// 		return nil, nil, fmt.Errorf("failed to get user by id: %w", err)
-// 	}
-// 	payment, err := s.repo.GetById(id)
-// 	if err != nil {
-// 		return nil, nil, fmt.Errorf("failed to get payment by id: %w", err)
-// 	}
-
-// 	store, err := s.store.GetByStoreId(payment.StoreId.Hex())
-// 	if err != nil {
-// 		return nil, nil, fmt.Errorf("failed to get store by id: %w", err)
-// 	}
-
-// 	if user.ID != store.OwnerId {
-// 		return nil, nil, fmt.Errorf("user %s is not the owner of store %s", username, store.ID)
-// 	}
-
-// 	stripe.Key = config.Envs.STRIPE_PWD
-// 	result, err := paymentintent.Get(payment.StripeID, &stripe.PaymentIntentParams{})
-// 	if err != nil {
-// 		return nil, nil, fmt.Errorf("intent not found: %w", err)
-// 	}
-
-// 	return payment, result, nil
-// }
