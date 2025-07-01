@@ -71,7 +71,7 @@ func (u *StoreRepositoryImpl) Create(oid string) (*model.Store, error) {
 		return nil, err
 	}
 
-	store.ID = inserted.InsertedID.(bson.ObjectID)
+	store.Id = inserted.InsertedID.(bson.ObjectID)
 	return store, nil
 }
 
