@@ -63,41 +63,12 @@ func (s *PaymentService) Create(username string) (any, error) {
 	if len(*result.Store.Tiers) == 0 {
 		return nil, fmt.Errorf("store has no tiers")
 	}
+
+	payment, err := s.repo.Create()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create payment: %w", err)
+	}
+
+
 	return nil, nil
 }
-
-// func (s *PaymentService) Create(m *model.CreatePaymentBody) (*model.Payment, error) {
-// 	stripe.Key = config.Envs.STRIPE_PWD
-// 	store, err := s.store.GetByStoreId(m.StoreId)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	tierLen := len(*store.Tiers)
-
-// 	if tierLen == 0 {
-// 		return nil, fmt.Errorf("store has no tiers")
-// 	}
-
-// 	tier := (*store.Tiers)[m.Tier]
-
-// 	params := &stripe.PaymentIntentParams{
-// 		Amount:   stripe.Int64(int64(float64(tier.Amount) * 1.10)),
-// 		Currency: stripe.String(stripe.CurrencyUSD),
-// 		AutomaticPaymentMethods: &stripe.PaymentIntentAutomaticPaymentMethodsParams{
-// 			Enabled: stripe.Bool(true),
-// 		},
-// 	}
-
-// 	result, err := paymentintent.New(params)
-
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to create payment intent: %w", err)
-// 	}
-
-// 	payment, err := s.repo.Create(m.StoreId, result.ID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return payment, nil
-// }
-
