@@ -127,3 +127,7 @@ func (u *StoreRepositoryImpl) GetByStoreId(oid string) (*model.Store, error) {
 
 	return store, nil
 }
+
+func (u *StoreRepositoryImpl) GetByUsername(username string) (*model.UserStoreResult, error) {
+	
+}

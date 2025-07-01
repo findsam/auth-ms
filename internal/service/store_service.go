@@ -9,10 +9,11 @@ import (
 
 type StoreService struct {
 	repo repo.StoreRepository
+	user repo.UserRepository
 }
 
-func NewStoreService(repo repo.StoreRepository) *StoreService {
-	return &StoreService{repo: repo}
+func NewStoreService(repo repo.StoreRepository, user repo.UserRepository) *StoreService {
+	return &StoreService{repo: repo, user: user}
 }
 
 func (s *StoreService) Create(oid string) (*model.Store, error) {
@@ -32,10 +33,14 @@ func (s *StoreService) Create(oid string) (*model.Store, error) {
 	return store, nil
 }
 
-func (s *StoreService) GetByUsername(username string) (*model.UserStoreResult, error) {
-	store, err := s.repo.GetByUsername(username)
+func (s *StoreService) GetByUsername(username string) (*model.Store, error) {
+	user, err := s.user.GetByUsername(username);
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get user by username: %w", err)
+	}
+	store, err := s.repo.GetById(user.Id.Hex())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get store by user id: %w", err)
 	}
 	return store, nil
 }

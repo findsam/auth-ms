@@ -19,7 +19,7 @@ func Execute() error {
 	userHandler := handler.NewUserHandler(userService)
 	
 	storeRepo := repo.NewStoreRepositoryImpl(db)
-	storeService := service.NewStoreService(storeRepo)
+	storeService := service.NewStoreService(storeRepo, userRepo)
 	storeHandler := handler.NewStoreHandler(storeService)
 	
 	paymentRepo := repo.NewPaymentRepositoryImpl(db)
