@@ -46,11 +46,11 @@ func (s *PaymentService) GetById(username string, id string) (any, error) {
 		return nil, fmt.Errorf("failed to get payment intent: %w", err)
 	}
 
-	return map[string]interface{}{
+	return map[string]any{
 		"payment": payment,
 		"store":   store,
 		"user":    user,
-		"intent":  result,
+		"intent": result,
 	}, nil
 }
 

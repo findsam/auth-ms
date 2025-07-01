@@ -24,3 +24,10 @@ type UserStoreResult struct {
 	User  UserPublic     `json:"user" bson:"user"`
 	Store StorePublic 	`json:"store" bson:"store"`
 }
+
+func (s *Store) ToPublic() StorePublic {
+	return StorePublic{
+		Id:    s.Id,
+		Tiers: s.Tiers,
+	}
+}

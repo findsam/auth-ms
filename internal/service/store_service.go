@@ -43,7 +43,7 @@ func (s *StoreService) GetByUsername(username string) (map[string]any, error) {
 		return nil, fmt.Errorf("failed to get store by user id: %w", err)
 	}
 	return map[string]any{
-		"store": store,
-		"user":  user,
+		"store": store.ToPublic(),
+		"user":  user.ToPublic(),
 	}, nil
 }
