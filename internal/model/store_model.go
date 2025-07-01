@@ -16,6 +16,7 @@ type Tier struct {
 }
 
 type StorePublic struct {
+	ID 	bson.ObjectID `bson:"_id,omitempty" json:"id"`
 	Tiers *[]Tier `json:"tiers" bson:"tiers"`
 }
 

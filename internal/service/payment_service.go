@@ -64,11 +64,20 @@ func (s *PaymentService) Create(username string) (any, error) {
 		return nil, fmt.Errorf("store has no tiers")
 	}
 
-	payment, err := s.repo.Create()
+	stripe.Key = config.Envs.STRIPE_PWD
+	params := &stripe.PaymentIntentParams{
+		Amount:   stripe.Int64(int64((*result.Store.Tiers)[0].Amount * 100)),
+		Currency: stripe.String("usd"),
+	}
+	
+	intent, err := paymentintent.New(params)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create payment intent: %w", err)
+	}
+
+	payment, err := s.repo.Create(result.Store.ID.Hex(), intent.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment: %w", err)
 	}
-
-
-	return nil, nil
+	return payment, nil
 }
