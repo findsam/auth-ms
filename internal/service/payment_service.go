@@ -54,8 +54,7 @@ func (s *PaymentService) GetById(username string, id string) (any, error) {
 	}, nil
 }
 
-func (s *PaymentService) Create(username string) (any, error) {
-
+func (s *PaymentService) Create(username string, tier int) (any, error) {
 	user, err := s.user.GetByUsername(username)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by username: %w", err)
@@ -72,7 +71,7 @@ func (s *PaymentService) Create(username string) (any, error) {
 
 	stripe.Key = config.Envs.STRIPE_PWD
 	params := &stripe.PaymentIntentParams{
-		Amount:   stripe.Int64(int64((*store.Tiers)[0].Amount * 100)),
+		Amount:   stripe.Int64(int64((*store.Tiers)[tier].Amount * 100)),
 		Currency: stripe.String("usd"),
 	}
 	

@@ -5,7 +5,6 @@ import (
 )
 
 type CreatePaymentBody struct {
-	StoreId string `json:"store_id" validate:"required"`
 	Tier    int    `json:"tier" validate:"gte=0,lte=3"`
 }
 
