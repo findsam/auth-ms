@@ -17,7 +17,6 @@ type StoreRepository interface {
 	Create(oid string) (*model.Store, error)
 	GetById(oid string) (*model.Store, error)
 	GetByStoreId(oid string) (*model.Store, error)
-	GetByUsername(username string) (*model.UserStoreResult, error)
 }
 
 type StoreRepositoryImpl struct {
@@ -126,8 +125,4 @@ func (u *StoreRepositoryImpl) GetByStoreId(oid string) (*model.Store, error) {
 	}
 
 	return store, nil
-}
-
-func (u *StoreRepositoryImpl) GetByUsername(username string) (*model.UserStoreResult, error) {
-	
 }

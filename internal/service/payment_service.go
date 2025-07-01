@@ -55,18 +55,24 @@ func (s *PaymentService) GetById(username string, id string) (any, error) {
 }
 
 func (s *PaymentService) Create(username string) (any, error) {
-	result, err := s.store.GetByUsername(username)
+
+	user, err := s.user.GetByUsername(username)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user by username: %w", err)
+	}
+
+	store, err := s.store.GetById(user.Id.Hex())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get store by username: %w", err)
 	}
 
-	if len(*result.Store.Tiers) == 0 {
+	if len(*store.Tiers) == 0 {
 		return nil, fmt.Errorf("store has no tiers")
 	}
 
 	stripe.Key = config.Envs.STRIPE_PWD
 	params := &stripe.PaymentIntentParams{
-		Amount:   stripe.Int64(int64((*result.Store.Tiers)[0].Amount * 100)),
+		Amount:   stripe.Int64(int64((*store.Tiers)[0].Amount * 100)),
 		Currency: stripe.String("usd"),
 	}
 	
@@ -75,7 +81,7 @@ func (s *PaymentService) Create(username string) (any, error) {
 		return nil, fmt.Errorf("failed to create payment intent: %w", err)
 	}
 
-	payment, err := s.repo.Create(result.Store.ID.Hex(), intent.ID)
+	payment, err := s.repo.Create(store.Id.Hex(), intent.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment: %w", err)
 	}
