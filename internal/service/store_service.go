@@ -33,8 +33,8 @@ func (s *StoreService) Create(oid string) (*model.Store, error) {
 	return store, nil
 }
 
-func (s *StoreService) GetByUsername(username string) (*model.Store, error) {
-	user, err := s.user.GetByUsername(username);
+func (s *StoreService) GetByUsername(username string) (map[string]interface{}, error) {
+	user, err := s.user.GetByUsername(username)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by username: %w", err)
 	}
@@ -42,5 +42,8 @@ func (s *StoreService) GetByUsername(username string) (*model.Store, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get store by user id: %w", err)
 	}
-	return store, nil
+	return map[string]interface{}{
+		"store": store,
+		"user":  user,
+	}, nil
 }
