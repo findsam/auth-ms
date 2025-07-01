@@ -42,15 +42,19 @@ func (s *PaymentService) GetById(username string, id string) (any, error) {
 
 	stripe.Key = config.Envs.STRIPE_PWD
 	result, err := paymentintent.Get(payment.StripeId, &stripe.PaymentIntentParams{})
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to get payment intent: %w", err)
 	}
 
 	return map[string]any{
-		"payment": payment,
-		"store":   store,
-		"user":    user,
-		"intent": result,
+		"store":   store.ToPublic(),
+		"user":    user.ToPublic(),
+		"intent": map[string]any{
+			"id":     result.ID,
+			"amount": result.Amount,
+			"client_secret": result.ClientSecret,
+		},
 	}, nil
 }
 
