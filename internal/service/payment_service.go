@@ -71,10 +71,10 @@ func (s *PaymentService) Create(username string, tier int) (any, error) {
 
 	stripe.Key = config.Envs.STRIPE_PWD
 	params := &stripe.PaymentIntentParams{
-		Amount:   stripe.Int64(int64((*store.Tiers)[tier].Amount * 100)),
+		Amount:   stripe.Int64(int64((*store.Tiers)[tier].Amount)),
 		Currency: stripe.String("usd"),
 	}
-	
+
 	intent, err := paymentintent.New(params)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create payment intent: %w", err)
