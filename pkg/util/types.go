@@ -8,6 +8,7 @@ type Config struct {
 	MONGO_URI              string
 	STRIPE_PWD             string
 	STRIPE_PUBLISHABLE_KEY string
+	PORT 				   string
 }
 
 type SignUpRequest struct {

@@ -5,11 +5,12 @@ import (
 	"github.com/findsam/auth-micro/internal/repo"
 	"github.com/findsam/auth-micro/internal/router"
 	"github.com/findsam/auth-micro/internal/service"
-	m "github.com/findsam/auth-micro/pkg/mongo"
+	"github.com/findsam/auth-micro/pkg/config"
+	"github.com/findsam/auth-micro/pkg/mongo"
 )
 
 func Execute() error {
-	db, err := m.New()
+	db, err := mongo.New()
 	if err != nil {
 		return err
 	}
@@ -33,6 +34,6 @@ func Execute() error {
 		User:    userHandler,
 	}
 
-	router := router.New("8080", deps)
-	return router.Start()
+	r := router.New(config.Envs.PORT, deps)
+	return r.Start()
 }

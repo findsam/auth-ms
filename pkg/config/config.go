@@ -18,6 +18,7 @@ func config() *util.Config {
 		MONGO_URI:              getEnv("MONGO_URI", ""),
 		STRIPE_PWD:             getEnv("STRIPE_PWD", ""),
 		STRIPE_PUBLISHABLE_KEY: getEnv("STRIPE_PUBLISHABLE_KEY", ""),
+		PORT: 				 	getEnv("PORT", "8080"),
 	}
 }
 
